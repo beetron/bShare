@@ -1,3 +1,4 @@
+
 namespace Bshare
 {
     public class Program
@@ -6,8 +7,14 @@ namespace Bshare
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Environment.SetEnvironmentVariable("bshare_connect",
+            //     builder.Configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            // Add environment variables.
+            //builder.Configuration.AddEnvironmentVariables(prefix: "bshare_");
 
             var app = builder.Build();
 

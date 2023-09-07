@@ -1,8 +1,14 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
+
+    string value = Environment.GetEnvironmentVariable("bshare_connect");
+    //string value = "bshare_connect";
+    Console.WriteLine(value);
 }
 
 <div class="text-center">
     <h5 class="display-4">BShare, simple file sharing for friends</h5>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>The value of bshare_connect is @value</p>
 </div>
