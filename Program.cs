@@ -1,4 +1,7 @@
 
+using Bshare.Db;
+using Microsoft.EntityFrameworkCore;
+
 namespace Bshare
 {
     public class Program
@@ -15,6 +18,13 @@ namespace Bshare
 
             // Add environment variables.
             //builder.Configuration.AddEnvironmentVariables(prefix: "bshare_");
+
+            var connectionString = Environment.GetEnvironmentVariable("bshare_connect");
+            builder.Services.AddDbContext<BshareDbContext>(options =>
+            {
+                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            });
+
 
             var app = builder.Build();
 
