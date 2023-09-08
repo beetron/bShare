@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
 
 namespace Bshare.Models
 {
@@ -11,8 +12,9 @@ namespace Bshare.Models
         public string? FileDescription { get; set; }
         public string? FilePath { get; set; }
         public string? FileShortLink { get; set; }
-        public DateTime UploadTime { get; set; }
-        public DateTime ExpireTime { get; set; }
+        public byte[]? QrImage { get; set; }
+        public DateTime TimeUpload { get; set; }
+        public DateTime TimeExpire { get; set; }
 
     }
 }

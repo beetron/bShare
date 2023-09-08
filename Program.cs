@@ -16,10 +16,22 @@ namespace Bshare
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Add environment variables.
-            //builder.Configuration.AddEnvironmentVariables(prefix: "bshare_");
+            // Enable environment variables.
+            builder.Configuration.AddEnvironmentVariables(prefix: "bshare_");
 
-            var connectionString = Environment.GetEnvironmentVariable("bshare_connect");
+
+            string connectionString = Environment.GetEnvironmentVariable("bshare_devconnect");
+            //
+            // if (currentEnvironment == "Development")
+            // {
+            //     connectionString = Environment.GetEnvironmentVariable("bshare_devconnect");
+            // }
+            // else if (currentEnvironment == "Production")
+            // {
+            //     connectionString = Environment.GetEnvironmentVariable("bshare_prodconnect");
+            // }
+
+
             builder.Services.AddDbContext<BshareDbContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
@@ -28,13 +40,35 @@ namespace Bshare
 
             var app = builder.Build();
 
+
+
+
             // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            // if (!app.Environment.IsDevelopment())
+            // {
+            //     app.UseExceptionHandler("/Home/Error");
+            //     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            //     app.UseHsts();
+            // }
+
+            if (app.Environment.IsProduction())
             {
+
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            else if (app.Environment.IsDevelopment())
+            {
+
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+
+
+
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
