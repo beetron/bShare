@@ -1,6 +1,7 @@
 
 using Bshare.Db;
 using Microsoft.EntityFrameworkCore;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace Bshare
 {
@@ -10,26 +11,27 @@ namespace Bshare
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Environment.SetEnvironmentVariable("bshare_connect",
-            //     builder.Configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value);
-
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // Enable environment variables.
+            // Enable custom environment variables.
             builder.Configuration.AddEnvironmentVariables(prefix: "bshare_");
 
+            // Store database connection string
+            string? connectionString = null;
 
-            string connectionString = Environment.GetEnvironmentVariable("bshare_devconnect");
-            //
-            // if (currentEnvironment == "Development")
-            // {
-            //     connectionString = Environment.GetEnvironmentVariable("bshare_devconnect");
-            // }
-            // else if (currentEnvironment == "Production")
-            // {
-            //     connectionString = Environment.GetEnvironmentVariable("bshare_prodconnect");
-            // }
+            // Create environment variable to check dev/prod/staging status
+            IHostEnvironment currentEnvironment = builder.Environment;
+
+            // Load different database connection string depending on dev or prod environment
+            if (currentEnvironment.IsDevelopment())
+            {
+                connectionString = builder.Configuration.GetValue<string>("DevConnectionString");
+            }
+            else if (currentEnvironment.IsProduction())
+            {
+                connectionString = builder.Configuration.GetValue<string>("ProdConnectionString");
+            }
 
 
             builder.Services.AddDbContext<BshareDbContext>(options =>
@@ -39,7 +41,6 @@ namespace Bshare
 
 
             var app = builder.Build();
-
 
 
 
