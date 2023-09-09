@@ -33,7 +33,7 @@ namespace Bshare
                 connectionString = builder.Configuration.GetValue<string>("ProdConnectionString");
             }
 
-
+            // Dependency injection for DbContext
             builder.Services.AddDbContext<BshareDbContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));

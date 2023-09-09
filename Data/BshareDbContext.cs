@@ -1,6 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using Bshare.Models;
 using Microsoft.EntityFrameworkCore;
-using File = Bshare.Models.File;
 
 namespace Bshare.Db
 {
@@ -10,6 +9,6 @@ namespace Bshare.Db
         {
         }
 
-        public DbSet<File> Files { get; set; }
+        public DbSet<FileMain> BshareFiles { get; set; }
     }
 }
