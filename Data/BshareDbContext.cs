@@ -9,6 +9,6 @@ namespace Bshare.Db
         {
         }
 
-        public DbSet<FileMain> BshareFiles { get; set; }
+        public DbSet<FileUpload> BshareFiles { get; set; }
     }
 }
