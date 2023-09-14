@@ -3,6 +3,7 @@ using System;
 using Bshare.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bshare.Migrations
 {
     [DbContext(typeof(BshareDbContext))]
-    partial class BshareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230914125912_OneToManyInit2")]
+    partial class OneToManyInit2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +41,7 @@ namespace Bshare.Migrations
 
                     b.HasKey("FileDetailId");
 
-                    b.ToTable("FileDetails", (string)null);
+                    b.ToTable("FileDetails");
                 });
 
             modelBuilder.Entity("Bshare.Models.FileUpload", b =>
@@ -61,7 +64,7 @@ namespace Bshare.Migrations
 
                     b.HasKey("FileUploadId");
 
-                    b.ToTable("FileUploads", (string)null);
+                    b.ToTable("FileUploads");
                 });
 
             modelBuilder.Entity("Bshare.Models.FileDetail", b =>

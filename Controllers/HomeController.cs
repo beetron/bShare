@@ -1,12 +1,16 @@
 ﻿using Bshare.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Bshare.Db;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+
+        private BshareDbContext db = new BshareDbContext(new DbContextOptions<BshareDbContext>());
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -15,7 +19,7 @@ namespace Bshare.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(db.FileUploads.ToList());
         }
 
         public IActionResult Privacy()

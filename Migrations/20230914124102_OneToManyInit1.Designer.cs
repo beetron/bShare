@@ -3,6 +3,7 @@ using System;
 using Bshare.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bshare.Migrations
 {
     [DbContext(typeof(BshareDbContext))]
-    partial class BshareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230914124102_OneToManyInit1")]
+    partial class OneToManyInit1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,6 +25,7 @@ namespace Bshare.Migrations
             modelBuilder.Entity("Bshare.Models.FileDetail", b =>
                 {
                     b.Property<int>("FileDetailId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("FileName")
@@ -36,9 +40,14 @@ namespace Bshare.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("FileUploadId")
+                        .HasColumnType("int");
+
                     b.HasKey("FileDetailId");
 
-                    b.ToTable("FileDetails", (string)null);
+                    b.HasIndex("FileUploadId");
+
+                    b.ToTable("FileDetails");
                 });
 
             modelBuilder.Entity("Bshare.Models.FileUpload", b =>
@@ -61,14 +70,14 @@ namespace Bshare.Migrations
 
                     b.HasKey("FileUploadId");
 
-                    b.ToTable("FileUploads", (string)null);
+                    b.ToTable("FileUploads");
                 });
 
             modelBuilder.Entity("Bshare.Models.FileDetail", b =>
                 {
                     b.HasOne("Bshare.Models.FileUpload", "FileUpload")
                         .WithMany("FileDetails")
-                        .HasForeignKey("FileDetailId")
+                        .HasForeignKey("FileUploadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

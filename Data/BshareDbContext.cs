@@ -1,4 +1,5 @@
 ﻿using Bshare.Models;
+using Microsoft.CodeAnalysis.Elfie.PDB;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Db
@@ -9,6 +10,18 @@ namespace Bshare.Db
         {
         }
 
-        public DbSet<FileUpload> BshareFiles { get; set; }
+        public DbSet<FileUpload> FileUploads { get; set; }
+        public DbSet<FileDetail> FileDetails { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<FileUpload>()
+                .HasMany(a => a.FileDetails)
+                .WithOne(b => b.FileUpload)
+                .HasForeignKey(b => b.FileDetailId);
+
+        }
     }
 }

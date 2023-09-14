@@ -5,12 +5,13 @@ namespace Bshare.Models
     public class FileUpload
     {
         [Key]
-        public int UploadId { get; set; }
-        public ICollection<FileDetail> FileDetail { get; set; }
+        public int FileUploadId { get; set; }
         public string? ShortLink { get; set; }
         public byte[]? QrImage { get; set; }
         public DateTime TimeUpload { get; set; }
         public DateTime TimeExpire { get; set; }
+        public ICollection<FileDetail> FileDetails { get; set; }
+
 
     }
 }
