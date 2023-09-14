@@ -19,7 +19,7 @@ namespace Bshare.Controllers
 
         public IActionResult Index()
         {
-            return View(db.FileUploads.ToList());
+            return View();
         }
 
         public IActionResult Privacy()
