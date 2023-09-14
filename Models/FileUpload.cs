@@ -10,8 +10,7 @@ namespace Bshare.Models
         public byte[]? QrImage { get; set; }
         public DateTime TimeUpload { get; set; }
         public DateTime TimeExpire { get; set; }
-        public ICollection<FileDetail> FileDetails { get; set; }
-
+        public virtual ICollection<FileDetail> FileDetails { get; set; } = new List<FileDetail>();
 
     }
 }
