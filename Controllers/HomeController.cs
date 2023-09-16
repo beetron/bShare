@@ -10,7 +10,7 @@ namespace Bshare.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        private BshareDbContext db = new BshareDbContext(new DbContextOptions<BshareDbContext>());
+        private ApplicationDbContext db = new ApplicationDbContext(new DbContextOptions<ApplicationDbContext>());
 
         public HomeController(ILogger<HomeController> logger)
         {

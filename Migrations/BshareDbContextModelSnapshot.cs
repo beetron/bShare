@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bshare.Migrations
 {
-    [DbContext(typeof(BshareDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class BshareDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -59,10 +59,14 @@ namespace Bshare.Migrations
                     b.Property<DateTime>("DateUpload")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
                     b.Property<byte[]>("QrImage")
                         .HasColumnType("longblob");
 
                     b.Property<string>("ShortLink")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("FileUploadId");

@@ -31,4 +31,12 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\FileUpload\Upload.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\FileUpload\Upload.cshtml" />
+  </ItemGroup>
+
 </Project>

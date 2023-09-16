@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Bshare.Migrations
 {
-    [DbContext(typeof(BshareDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20230907170002_Init")]
     partial class Init
     {

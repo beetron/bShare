@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Db
 {
-    public class BshareDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public BshareDbContext(DbContextOptions<BshareDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 

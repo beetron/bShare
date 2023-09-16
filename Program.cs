@@ -34,7 +34,7 @@ namespace Bshare
             }
 
             // Dependency injection for DbContext
-            builder.Services.AddDbContext<BshareDbContext>(options =>
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });

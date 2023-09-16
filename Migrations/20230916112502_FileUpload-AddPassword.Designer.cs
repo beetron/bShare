@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bshare.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230914125912_OneToManyInit2")]
-    partial class OneToManyInit2
+    [Migration("20230916112502_FileUpload-AddPassword")]
+    partial class FileUploadAddPassword
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,7 @@ namespace Bshare.Migrations
             modelBuilder.Entity("Bshare.Models.FileDetail", b =>
                 {
                     b.Property<int>("FileDetailId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("FileName")
@@ -39,7 +40,12 @@ namespace Bshare.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("FileUploadId")
+                        .HasColumnType("int");
+
                     b.HasKey("FileDetailId");
+
+                    b.HasIndex("FileUploadId");
 
                     b.ToTable("FileDetails");
                 });
@@ -50,17 +56,21 @@ namespace Bshare.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DateExpire")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateUpload")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("longtext");
+
                     b.Property<byte[]>("QrImage")
                         .HasColumnType("longblob");
 
                     b.Property<string>("ShortLink")
+                        .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<DateTime>("TimeExpire")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("TimeUpload")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("FileUploadId");
 
@@ -71,7 +81,7 @@ namespace Bshare.Migrations
                 {
                     b.HasOne("Bshare.Models.FileUpload", "FileUpload")
                         .WithMany("FileDetails")
-                        .HasForeignKey("FileDetailId")
+                        .HasForeignKey("FileUploadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
