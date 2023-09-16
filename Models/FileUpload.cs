@@ -6,10 +6,10 @@ namespace Bshare.Models
     {
         [Key]
         public int FileUploadId { get; set; }
-        public string? ShortLink { get; set; }
-        public byte[]? QrImage { get; set; }
-        public DateTime TimeUpload { get; set; }
-        public DateTime TimeExpire { get; set; }
+        public string ShortLink { get; set; }
+        public byte[] QrImage { get; set; }
+        public DateTime DateUpload { get; set; }
+        public DateTime DateExpire { get; set; }
         public virtual ICollection<FileDetail> FileDetails { get; set; } = new List<FileDetail>();
 
     }
