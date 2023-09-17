@@ -1,5 +1,6 @@
 
 using Bshare.Db;
+using Bshare.Repository;
 using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -38,6 +39,9 @@ namespace Bshare
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
             });
+
+            // Dependency injection for IFileUpload repository
+            builder.Services.AddSingleton<IFilesUploadRepository, FilesUploadRepository>();
 
 
             var app = builder.Build();
@@ -79,8 +83,11 @@ namespace Bshare
             app.UseAuthorization();
 
             app.MapControllerRoute(
+                // name: "default",
+                // pattern: "{controller=FileUpload}/{action=Index}/{id?}");
                 name: "default",
-                pattern: "{controller=FileUpload}/{action=Index}/{id?}");
+                pattern: "{action}/{id?}",
+                defaults: new { controller = "FileUpload", action = "Index" });
 
             app.Run();
         }
