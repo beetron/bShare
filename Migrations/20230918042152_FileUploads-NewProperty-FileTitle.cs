@@ -30,7 +30,7 @@ namespace Bshare.Migrations
                 oldType: "datetime(6)");
 
             migrationBuilder.AddColumn<string>(
-                name: "FileTitle",
+                name: "FileDescription",
                 table: "FileUploads",
                 type: "longtext",
                 nullable: false)
@@ -41,7 +41,7 @@ namespace Bshare.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FileTitle",
+                name: "FileDescription",
                 table: "FileUploads");
 
             migrationBuilder.UpdateData(

@@ -6,7 +6,8 @@ namespace Bshare.Models
     {
         [Key]
         public int FileUploadId { get; set; }
-        public string FileTitle { get; set; }
+        //[Required(ErrorMessage = "File Description is required.")]
+        public string? FileDescription { get; set; }
         public string? ShortLink { get; set; }
         public string? Password { get; set; }
         public byte[]? QrImage { get; set; }

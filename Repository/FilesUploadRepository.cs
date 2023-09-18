@@ -1,6 +1,5 @@
 ﻿using Bshare.Db;
 using Bshare.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Repository
@@ -14,16 +13,19 @@ namespace Bshare.Repository
             _fileUploadContext = fileUploadContext;
         }
 
+        // Get full list of uploads (admin only)
         public async Task<List<FileUpload>> GetAllAsync()
         {
            return await _fileUploadContext.FileUploads.ToListAsync();
         }
 
+        // Get single upload record by id (used for link sharing and edits)
         public async Task<FileUpload> GetByIdAsync(int id)
         {
             return _fileUploadContext.FileUploads.FirstOrDefault(p => p.FileUploadId == id);
         }
 
+        // Create new file upload
         public async Task CreateAsync(FileUpload fileUpload)
         {
             try
@@ -39,6 +41,7 @@ namespace Bshare.Repository
             //return Task.CompletedTask;
         }
 
+        // Delete a single upload record by id
         public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
