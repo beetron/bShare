@@ -1,5 +1,6 @@
 ﻿using Bshare.Db;
 using Bshare.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Repository
@@ -18,14 +19,24 @@ namespace Bshare.Repository
            return await _fileUploadContext.FileUploads.ToListAsync();
         }
 
-        public Task<FileUpload> GetByIdAsync(int id)
+        public async Task<FileUpload> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return _fileUploadContext.FileUploads.FirstOrDefault(p => p.FileUploadId == id);
         }
 
-        public Task FileUploadAsync(FileUpload fileUpload)
+        public async Task CreateAsync(FileUpload fileUpload)
         {
-            throw new NotImplementedException();
+            try
+            {
+                await _fileUploadContext.FileUploads.AddAsync(fileUpload);
+                await _fileUploadContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+            
+            //return Task.CompletedTask;
         }
 
         public Task DeleteAsync(int id)

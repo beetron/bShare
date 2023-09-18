@@ -41,7 +41,7 @@ namespace Bshare
             });
 
             // Dependency injection for IFileUpload repository
-            builder.Services.AddSingleton<IFilesUploadRepository, FilesUploadRepository>();
+            builder.Services.AddScoped<IFilesUploadRepository, FilesUploadRepository>();
 
 
             var app = builder.Build();
@@ -87,7 +87,7 @@ namespace Bshare
                 // pattern: "{controller=FileUpload}/{action=Index}/{id?}");
                 name: "default",
                 pattern: "{action}/{id?}",
-                defaults: new { controller = "FileUpload", action = "Index" });
+                defaults: new { controller = "FileUpload", action = "Upload" });
 
             app.Run();
         }

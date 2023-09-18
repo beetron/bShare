@@ -1,16 +1,18 @@
 ﻿using Bshare.Db;
 using Bshare.Models;
+using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Controllers
 {
     public class FileUploadController : Controller
     {
-        readonly ApplicationDbContext _context;
+        private readonly IFilesUploadRepository _iFilesUploadRepository;
 
-        public FileUploadController(ApplicationDbContext context)
+        public FileUploadController(IFilesUploadRepository iFilesUploadRepository)
         {
-            _context = context;
+            _iFilesUploadRepository = iFilesUploadRepository;
         }
 
         // void ShortLink()
@@ -18,19 +20,17 @@ namespace Bshare.Controllers
         //     string linkCheck = _context.FileUploads.ToString();
         // }
 
-        /*[HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind(
-                "FileUploadId", "ShortLink", "DateUpload", "DateExpire", "Password")]
-            FileUpload fileUpload, List<IFormFile> files)
+        public async Task <IActionResult> Create(FileUpload fileUpload)
         {
             if (ModelState.IsValid)
             {
-                // Generate unique short link
-                fileUpload.ShortLink = ShortGuid.NewGuid().ToString();
-
+                await _iFilesUploadRepository.CreateAsync(fileUpload);
+                return RedirectToAction(nameof(Upload));
             }
-        }*/
+            return View(Upload);
+        }
 
         public IActionResult Index()
         {
