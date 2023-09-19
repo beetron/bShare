@@ -1,4 +1,5 @@
-﻿using Bshare.Db;
+﻿using System.Linq.Expressions;
+using Bshare.Db;
 using Bshare.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,6 +46,24 @@ namespace Bshare.Repository
         public Task DeleteAsync(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> CheckShortLink(string shortLink)
+        {
+            try
+            {
+                var result = await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f => f.ShortLink == shortLink);
+                if (result != null)
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Something went wrong during shortlink unique check");
+                return true;
+            }
         }
     }
 }

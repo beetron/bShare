@@ -1,15 +1,17 @@
 ﻿using System.Runtime.CompilerServices;
 using Bshare.Db;
+using Bshare.Functions;
 using Bshare.Models;
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Bshare.Controllers
 {
     public class FileUploadController : Controller
     {
-        private readonly IFilesUploadRepository _iFilesUploadRepository;
+        readonly IFilesUploadRepository _iFilesUploadRepository;
 
         public FileUploadController(IFilesUploadRepository iFilesUploadRepository)
         {
@@ -46,6 +48,29 @@ namespace Bshare.Controllers
                         break;
                 }
 
+                // Generate short link and check database if unique
+                bool isNotUnique;
+                string? shortLink = null;
+
+                do
+                {
+                    shortLink = ShortLinkGenerator.LinkGenerate(6);
+                    isNotUnique = await _iFilesUploadRepository.CheckShortLink(shortLink);
+                } while (isNotUnique);
+
+                if (!isNotUnique)
+                {
+                    fileUpload.ShortLink = shortLink;
+                }
+
+                // Create file directory if it doesn't exist
+                var directoryPath = Path.Combine("c:/dev/UPLOADS", shortLink);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+
                 // Process selected files
                 foreach (var file in files)
                 {
@@ -56,7 +81,7 @@ namespace Bshare.Controllers
                         var fileSizeKb = fileSizeBytes / 1024;
                         var filesizeMb = fileSizeKb / 1024;
 
-                        var filePath = Path.Combine("c:/dev/UPLOADS", file.FileName);
+                        var filePath = Path.Combine("c:/dev/UPLOADS", shortLink, file.FileName);
 
                         FileDetail fileDetail = new FileDetail
                         {
@@ -73,6 +98,7 @@ namespace Bshare.Controllers
                     }
                 }
 
+                
 
                 await _iFilesUploadRepository.CreateAsync(fileUpload);
                 return RedirectToAction(nameof(Upload));

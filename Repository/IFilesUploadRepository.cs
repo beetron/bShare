@@ -8,5 +8,6 @@ namespace Bshare.Repository
         Task<FileUpload> GetByIdAsync(int id);
         Task CreateAsync(FileUpload fileUpload);
         Task DeleteAsync(int id);
+        Task<bool> CheckShortLink(string shortLink);
     }
 }
