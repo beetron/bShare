@@ -1,11 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using Bshare.Db;
-using Bshare.Functions;
+﻿using Bshare.Functions;
 using Bshare.Models;
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace Bshare.Controllers
 {
