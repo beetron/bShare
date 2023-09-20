@@ -59,8 +59,11 @@ namespace Bshare.Controllers
                     fileUpload.ShortLink = shortLink;
                 }
 
+                // Create file upload and save
+                await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
+
                 // Create file directory if it doesn't exist
-                var directoryPath = Path.Combine("c:/dev/UPLOADS", shortLink);
+                string directoryPath = Path.Combine("c:/dev/UPLOADS", shortLink);
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
@@ -73,16 +76,16 @@ namespace Bshare.Controllers
                     if (file != null & file.Length > 0)
                     {
                         // Get file size in MB format
-                        var fileSizeBytes = file.Length;
-                        var fileSizeKb = fileSizeBytes / 1024;
-                        var filesizeMb = fileSizeKb / 1024;
+                        double fileSizeBytes = file.Length;
+                        double fileSizeKb = fileSizeBytes / 1024;
+                        double filesizeMb = fileSizeKb / 1024;
 
-                        var filePath = Path.Combine("c:/dev/UPLOADS", shortLink, file.FileName);
+                        string filePath = Path.Combine("c:/dev/UPLOADS", shortLink, file.FileName);
 
                         FileDetail fileDetail = new FileDetail
                         {
                             FileName = file.FileName,
-                            FileSize = Convert.ToString(filesizeMb),
+                            FileSize = filesizeMb,
                             FilePath = filePath,
                             FileUploadId = fileUpload.FileUploadId
                         };
@@ -91,12 +94,13 @@ namespace Bshare.Controllers
                         {
                             await file.CopyToAsync(stream);
                         }
+                        await _iFilesUploadRepository.CreateFileDetailAsync(fileDetail);
                     }
                 }
 
                 
 
-                await _iFilesUploadRepository.CreateAsync(fileUpload);
+                
                 return RedirectToAction(nameof(Upload));
             }
             return View(Upload);

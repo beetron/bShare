@@ -6,7 +6,8 @@ namespace Bshare.Repository
     {
         Task<List<FileUpload>> GetAllAsync();
         Task<FileUpload> GetByIdAsync(int id);
-        Task CreateAsync(FileUpload fileUpload);
+        Task CreateFileUploadAsync(FileUpload fileUpload);
+        Task CreateFileDetailAsync(FileDetail fileDetail);
         Task DeleteAsync(int id);
         Task<bool> CheckShortLink(string shortLink);
     }

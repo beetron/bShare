@@ -2,12 +2,6 @@
 {
     public static class ShortLinkGenerator
     {
-        // public int Length { get; set; }
-        // public ShortLinkGenerator(int length)
-        // {
-        //     Length = length;
-        // }
-
         public static string LinkGenerate(int length)
         {
             Random random = new Random();

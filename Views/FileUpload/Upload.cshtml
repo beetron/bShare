@@ -1,5 +1,6 @@
 ﻿﻿@using System.Security.Cryptography.X509Certificates
 @model FileUpload
+
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
@@ -12,19 +13,25 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-group">
+    <div class="form-group p-2">
         @Html.LabelFor(model => model.FileDescription)
         @Html.TextBoxFor(model => model.FileDescription, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.FileDescription)
     </div>
 
-    <div class="form-group p-2">
+    @*<div class="form-group p-1">
         <label for="files" class="control-label" />
         <input type="file" id="files" name="files" multiple />
+    </div>*@
+
+    <div class="form-group p-1">
+        <label for="files" class="control-label"></label>
+        <input type="file" id="files" name="files" multiple />
+        <div id="selectedFileDetails"></div>
     </div>
 
     // DateExpire selection
-    <div class="form-group">
+    <div class="form-group p-2">
         @Html.Label("File expire setting")
         @Html.DropDownList("DropdownSelection", new SelectList(
     new List<SelectListItem>
@@ -35,7 +42,7 @@
     }, "Value", "Text"), new { @class = "form-control" })
     </div>
 
-    <div class="form-group">
+    <div class="form-group p-1">
         <input type="submit" value="Create" class="btn btn-primary" />
     </div>
 }
@@ -43,3 +50,19 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+<script>
+    document.getElementById('files').addEventListener('change', function () {
+        var selectedFiles = this.files;
+        var selectedFileDetails = '';
+
+        if (selectedFiles.length > 0) {
+            for (var i = 0; i < selectedFiles.length; i++) {
+                selectedFileDetails += 'File: ' + selectedFiles[i].name + '<br />';
+                selectedFileDetails += 'Size: ' + (selectedFiles[i].size / 1024 / 1024).toFixed(2) + ' MB<br /><br />';
+            }
+        }
+
+        document.getElementById('selectedFileDetails').innerHTML = selectedFileDetails;
+    });
+</script>

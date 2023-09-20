@@ -27,7 +27,7 @@ namespace Bshare.Repository
         }
 
         // Create new file upload
-        public async Task CreateAsync(FileUpload fileUpload)
+        public async Task CreateFileUploadAsync(FileUpload fileUpload)
         {
             try
             {
@@ -39,6 +39,22 @@ namespace Bshare.Repository
                 Console.Write(ex);
             }
             
+            //return Task.CompletedTask;
+        }
+
+        // Create new file detail
+        public async Task CreateFileDetailAsync(FileDetail fileDetail)
+        {
+            try
+            {
+                await _fileUploadContext.FileDetails.AddAsync(fileDetail);
+                await _fileUploadContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+            }
+
             //return Task.CompletedTask;
         }
 

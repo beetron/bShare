@@ -17,11 +17,11 @@ namespace Bshare.Db
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<FileUpload>()
-                .HasMany(a => a.FileDetails)
-                .WithOne(b => b.FileUpload)
-                .HasForeignKey(b => b.FileUploadId);
-
+            modelBuilder.Entity<FileDetail>()
+                .HasOne(a => a.FileUpload)
+                .WithMany(b => b.FileDetails)
+                .HasForeignKey(a => a.FileUploadId)
+                .IsRequired();
 
             // Cascading delete behavior to remove any files tied with FileUploadID
             modelBuilder.Entity<FileUpload>()
