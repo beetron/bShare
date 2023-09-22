@@ -45,9 +45,6 @@ namespace Bshare
             // Dependency injection for IFileUpload repository
             builder.Services.AddScoped<IFilesUploadRepository, FilesUploadRepository>();
 
-            // Dependency injection for FileUpload service
-            builder.Services.AddTransient<IFileUploadService, FileUploadService>();
-
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

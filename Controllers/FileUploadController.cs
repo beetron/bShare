@@ -13,22 +13,16 @@ namespace Bshare.Controllers
     public class FileUploadController : Controller
     {
         readonly IFilesUploadRepository _iFilesUploadRepository;
-        readonly IFileUploadService _fileUploadService;
 
-        public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IFileUploadService iFileUploadService)
+        public FileUploadController(IFilesUploadRepository iFilesUploadRepository)
         {
             _iFilesUploadRepository = iFilesUploadRepository;
-            _fileUploadService = iFileUploadService;
         }
-
-        // void ShortLink()
-        // {
-        //     string linkCheck = _context.FileUploads.ToString();
-        // }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [RequestFormLimits(MultipartBodyLengthLimit = 524288000)]
+        [RequestSizeLimit(510 * 1024 * 1024)] // Total 510mb
+        [RequestFormLimits(MultipartBodyLengthLimit = 505 * 1024 * 1024)] // Form data 505mb
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
             if (ModelState.IsValid)
@@ -55,34 +49,18 @@ namespace Bshare.Controllers
                 // Generate short link and check database if unique
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
 
-                /*bool isNotUnique;
-                string? shortLink = null;
-
-                do
-                {
-                    shortLink = ShortLinkHelper.LinkGenerate(6);
-                    isNotUnique = await _iFilesUploadRepository.CheckShortLink(shortLink);
-                } while (isNotUnique);
-
-                if (!isNotUnique)
-                {
-                    fileUpload.ShortLink = shortLink;
-                }*/
-
-                // Create file upload and save
+                // Create new file upload DB (not the actual file) and save
                 await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
                 // Create file directory if it doesn't exist
-                // string directoryPath = Path.Combine("c:/dev/UPLOADS", shortLink);
-                // if (!Directory.Exists(directoryPath))
-                // {
-                //     Directory.CreateDirectory(directoryPath);
-                // }
-
+                string directoryPath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink);
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
 
                 // Process selected files
-
-                /*foreach (var file in files)
+                foreach (var file in files)
                 {
                     if (file != null & file.Length > 0)
                     {
@@ -91,7 +69,7 @@ namespace Bshare.Controllers
                         double fileSizeKb = fileSizeBytes / 1024;
                         double filesizeMb = fileSizeKb / 1024;
 
-                        string filePath = Path.Combine("c:/dev/UPLOADS", shortLink, file.FileName);
+                        string filePath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink, file.FileName);
 
                         FileDetail fileDetail = new FileDetail
                         {
@@ -107,17 +85,15 @@ namespace Bshare.Controllers
                         }
                         await _iFilesUploadRepository.CreateFileDetailAsync(fileDetail);
                     }
-                }*/
+                }
 
-                // NEW PART
+                // MultipartReader START
 
-                string boundary = HeaderUtilities.RemoveQuotes(
+                /*string boundary = HeaderUtilities.RemoveQuotes(
                     MediaTypeHeaderValue.Parse(Request.ContentType).Boundary).Value;
 
                 MultipartReader reader = new MultipartReader(boundary, Request.Body);
                 MultipartSection section = await reader.ReadNextSectionAsync();
-
-                
 
                 string response = string.Empty;
 
@@ -135,9 +111,9 @@ namespace Bshare.Controllers
                 catch (Exception ex)
                 {
                     ViewBag.Message = "Exception";
-                }
+                }*/
 
-                // NEW PART END
+                // MultipartReader END
                 return RedirectToAction(nameof(Upload));
             }
             return View(Upload);
