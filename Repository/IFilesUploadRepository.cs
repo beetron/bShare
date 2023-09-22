@@ -10,5 +10,6 @@ namespace Bshare.Repository
         Task CreateFileDetailAsync(FileDetail fileDetail);
         Task DeleteAsync(int id);
         Task<bool> CheckShortLink(string shortLink);
+        Task<string> GenerateShortLink(int shortLinkLength);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Bshare.Functions
 {
-    public class QrGenerator
+    public class QrHelper
     {
     }
 }

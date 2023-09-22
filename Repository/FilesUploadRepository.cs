@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using Bshare.Db;
+using Bshare.Functions;
 using Bshare.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,6 +81,27 @@ namespace Bshare.Repository
                 Console.WriteLine("Something went wrong during shortlink unique check");
                 return true;
             }
+        }
+
+        public async Task<string> GenerateShortLink(int shortLinkLength)
+        {
+            string shortLink;
+            FileUpload result;
+
+            do
+            {
+                Random random = new Random();
+                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12345679";
+                shortLink = new string(Enumerable.Repeat(chars, shortLinkLength).Select(s => s[random.Next(s.Length)])
+                    .ToArray());
+
+                // Test if generated shortlink is unique 
+                result =
+                    await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f => f.ShortLink == shortLink);
+            } while (result != null);
+
+            return shortLink;
+
         }
     }
 }

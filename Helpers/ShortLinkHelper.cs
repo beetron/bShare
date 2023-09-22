@@ -1,6 +1,9 @@
-﻿namespace Bshare.Functions
+﻿using Bshare.Models;
+using Bshare.Repository;
+
+namespace Bshare.Functions
 {
-    public static class ShortLinkGenerator
+    public static class ShortLinkHelper
     {
         public static string LinkGenerate(int length)
         {

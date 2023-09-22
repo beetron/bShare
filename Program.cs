@@ -1,6 +1,8 @@
 
 using Bshare.Db;
+using Bshare.Interfaces;
 using Bshare.Repository;
+using Bshare.Services;
 using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -43,10 +45,10 @@ namespace Bshare
             // Dependency injection for IFileUpload repository
             builder.Services.AddScoped<IFilesUploadRepository, FilesUploadRepository>();
 
+            // Dependency injection for FileUpload service
+            builder.Services.AddTransient<IFileUploadService, FileUploadService>();
 
             var app = builder.Build();
-
-
 
             // Configure the HTTP request pipeline.
             // if (!app.Environment.IsDevelopment())
@@ -70,7 +72,6 @@ namespace Bshare
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
 
 
 

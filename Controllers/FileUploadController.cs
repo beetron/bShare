@@ -1,17 +1,24 @@
-﻿using Bshare.Functions;
+﻿using System.Net.Http.Headers;
+using Bshare.Functions;
+using Bshare.Interfaces;
 using Bshare.Models;
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
+using MediaTypeHeaderValue = Microsoft.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace Bshare.Controllers
 {
     public class FileUploadController : Controller
     {
         readonly IFilesUploadRepository _iFilesUploadRepository;
+        readonly IFileUploadService _fileUploadService;
 
-        public FileUploadController(IFilesUploadRepository iFilesUploadRepository)
+        public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IFileUploadService iFileUploadService)
         {
             _iFilesUploadRepository = iFilesUploadRepository;
+            _fileUploadService = iFileUploadService;
         }
 
         // void ShortLink()
@@ -21,6 +28,7 @@ namespace Bshare.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RequestFormLimits(MultipartBodyLengthLimit = 524288000)]
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
             if (ModelState.IsValid)
@@ -45,33 +53,36 @@ namespace Bshare.Controllers
                 }
 
                 // Generate short link and check database if unique
-                bool isNotUnique;
+                fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
+
+                /*bool isNotUnique;
                 string? shortLink = null;
 
                 do
                 {
-                    shortLink = ShortLinkGenerator.LinkGenerate(6);
+                    shortLink = ShortLinkHelper.LinkGenerate(6);
                     isNotUnique = await _iFilesUploadRepository.CheckShortLink(shortLink);
                 } while (isNotUnique);
 
                 if (!isNotUnique)
                 {
                     fileUpload.ShortLink = shortLink;
-                }
+                }*/
 
                 // Create file upload and save
                 await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
                 // Create file directory if it doesn't exist
-                string directoryPath = Path.Combine("c:/dev/UPLOADS", shortLink);
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
+                // string directoryPath = Path.Combine("c:/dev/UPLOADS", shortLink);
+                // if (!Directory.Exists(directoryPath))
+                // {
+                //     Directory.CreateDirectory(directoryPath);
+                // }
 
 
                 // Process selected files
-                foreach (var file in files)
+
+                /*foreach (var file in files)
                 {
                     if (file != null & file.Length > 0)
                     {
@@ -96,11 +107,37 @@ namespace Bshare.Controllers
                         }
                         await _iFilesUploadRepository.CreateFileDetailAsync(fileDetail);
                     }
+                }*/
+
+                // NEW PART
+
+                string boundary = HeaderUtilities.RemoveQuotes(
+                    MediaTypeHeaderValue.Parse(Request.ContentType).Boundary).Value;
+
+                MultipartReader reader = new MultipartReader(boundary, Request.Body);
+                MultipartSection section = await reader.ReadNextSectionAsync();
+
+                
+
+                string response = string.Empty;
+
+                try
+                {
+                    if (await _fileUploadService.UploadFile(reader, section, fileUpload.ShortLink))
+                    {
+                        ViewBag.Message = "File(s) uploaded successfully.";
+                    }
+                    else
+                    {
+                        ViewBag.Message = "Upload failed";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "Exception";
                 }
 
-                
-
-                
+                // NEW PART END
                 return RedirectToAction(nameof(Upload));
             }
             return View(Upload);
