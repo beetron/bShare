@@ -1,8 +1,6 @@
 
 using Bshare.Db;
-using Bshare.Interfaces;
 using Bshare.Repository;
-using Bshare.Services;
 using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 

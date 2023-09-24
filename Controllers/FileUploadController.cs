@@ -1,12 +1,6 @@
-﻿using System.Net.Http.Headers;
-using Bshare.Functions;
-using Bshare.Interfaces;
-using Bshare.Models;
+﻿using Bshare.Models;
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Net.Http.Headers;
-using MediaTypeHeaderValue = Microsoft.Net.Http.Headers.MediaTypeHeaderValue;
 
 namespace Bshare.Controllers
 {
@@ -50,7 +44,7 @@ namespace Bshare.Controllers
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
 
                 // Create new file upload DB (not the actual file) and save
-                await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
+//                await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
                 // Create file directory if it doesn't exist
                 string directoryPath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink);
@@ -59,7 +53,7 @@ namespace Bshare.Controllers
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                // Process selected files
+                // NEW FILE CODE TEST START
                 foreach (var file in files)
                 {
                     if (file != null & file.Length > 0)
@@ -67,53 +61,27 @@ namespace Bshare.Controllers
                         // Get file size in MB format
                         double fileSizeBytes = file.Length;
                         double fileSizeKb = fileSizeBytes / 1024;
-                        double filesizeMb = fileSizeKb / 1024;
+                        double fileSizeMb = fileSizeKb / 1024;
 
                         string filePath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink, file.FileName);
 
-                        FileDetail fileDetail = new FileDetail
+                        fileUpload.FileDetails.Add(new FileDetail
                         {
-                            FileName = file.FileName,
-                            FileSize = filesizeMb,
-                            FilePath = filePath,
-                            FileUploadId = fileUpload.FileUploadId
-                        };
+                            FileName = file.FileName, 
+                            FileSize = fileSizeMb, 
+                            FilePath = filePath
+                        });
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await file.CopyToAsync(stream);
                         }
-                        await _iFilesUploadRepository.CreateFileDetailAsync(fileDetail);
                     }
                 }
 
-                // MultipartReader START
+                // Save database tables
+                await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
-                /*string boundary = HeaderUtilities.RemoveQuotes(
-                    MediaTypeHeaderValue.Parse(Request.ContentType).Boundary).Value;
-
-                MultipartReader reader = new MultipartReader(boundary, Request.Body);
-                MultipartSection section = await reader.ReadNextSectionAsync();
-
-                string response = string.Empty;
-
-                try
-                {
-                    if (await _fileUploadService.UploadFile(reader, section, fileUpload.ShortLink))
-                    {
-                        ViewBag.Message = "File(s) uploaded successfully.";
-                    }
-                    else
-                    {
-                        ViewBag.Message = "Upload failed";
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.Message = "Exception";
-                }*/
-
-                // MultipartReader END
                 return RedirectToAction(nameof(Upload));
             }
             return View(Upload);

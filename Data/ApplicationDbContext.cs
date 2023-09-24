@@ -17,6 +17,7 @@ namespace Bshare.Db
         {
             base.OnModelCreating(modelBuilder);
 
+            // One-to-many relationship
             modelBuilder.Entity<FileDetail>()
                 .HasOne(a => a.FileUpload)
                 .WithMany(b => b.FileDetails)
