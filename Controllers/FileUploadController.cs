@@ -43,9 +43,6 @@ namespace Bshare.Controllers
                 // Generate short link and check database if unique
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
 
-                // Create new file upload DB (not the actual file) and save
-//                await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
-
                 // Create file directory if it doesn't exist
                 string directoryPath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink);
                 if (!Directory.Exists(directoryPath))
