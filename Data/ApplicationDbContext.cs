@@ -26,9 +26,9 @@ namespace Bshare.Db
 
             // Cascading delete behavior to remove any files tied with FileUploadID
             modelBuilder.Entity<FileUpload>()
-                .HasMany(upload => upload.FileDetails)
-                .WithOne(detail => detail.FileUpload)
-                .HasForeignKey(detail => detail.FileUploadId)
+                .HasMany(a => a.FileDetails)
+                .WithOne(b => b.FileUpload)
+                .HasForeignKey(b => b.FileUploadId)
                 .OnDelete(DeleteBehavior.Cascade);
 
         }

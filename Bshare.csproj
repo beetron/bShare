@@ -36,7 +36,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\FileUpload\BadLink.cshtml" />
     <_ContentIncludedByDefault Remove="Views\FileUpload\Upload.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\FileUpload\BadLink.cshtml" />
   </ItemGroup>
 
 </Project>

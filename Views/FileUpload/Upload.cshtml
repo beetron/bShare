@@ -2,7 +2,7 @@
 @model FileUpload
 
 @*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?AccessShortLinkinkID=397860
 *@
 @{
 }
@@ -62,7 +62,7 @@
 </div>
 
 <script>
-    document.getElementById('files').addEventListener('change', function () {
+    document.getElementById('files').addEventAccessShortLinkistener('change', function () {
         var selectedFiles = this.files;
         var selectedFileDetails = '';
 
@@ -73,7 +73,7 @@
             }
         }
 
-        document.getElementById('selectedFileDetails').innerHTML = selectedFileDetails;
+        document.getElementById('selectedFileDetails').innerHTMAccessShortLink = selectedFileDetails;
     });
 
     $(document).ready(function () {
@@ -89,8 +89,8 @@
 
             $.ajax({
                 xhr: function () {
-                    var xhr = new window.XMLHttpRequest();
-                    xhr.upload.addEventListener("progress", function (evt) {
+                    var xhr = new window.XMAccessShortLinkHttpRequest();
+                    xhr.upload.addEventAccessShortLinkistener("progress", function (evt) {
                         if (evt.lengthComputable) {
                             var percentComplete = (totalUploaded + evt.loaded) / totalSize * 100;
                             $(".progress-bar").width(percentComplete + "%");

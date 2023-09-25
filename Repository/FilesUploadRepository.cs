@@ -55,20 +55,52 @@ namespace Bshare.Repository
             {
                 Console.Write(ex);
             }
-
-            //return Task.CompletedTask;
         }
 
         // Delete a single upload record by id
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
+            try
+            {
+                var record = await _fileUploadContext.FileUploads.FindAsync(id);
+                if (record != null)
+                {
+                    _fileUploadContext.FileUploads.Remove(record);
+                    await _fileUploadContext.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
             throw new NotImplementedException();
+        }
+        
+        // Check database for short link
+        public async Task<bool> CheckShortLink(string shortLink)
+        {
+            try
+            {
+                FileUpload result = await _fileUploadContext.FileUploads.FirstOrDefaultAsync(x => x.ShortLink == shortLink);
+                if (result != null)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
         // Short link generator with database check if link is unique
         public async Task<string> GenerateShortLink(int shortLinkLength)
         {
-            string shortLink;
+            string shortLink = "";
             FileUpload result;
 
             try
@@ -91,7 +123,7 @@ namespace Bshare.Repository
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                throw;
+                return shortLink;
             }
         }
     }

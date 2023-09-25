@@ -12,6 +12,7 @@ namespace Bshare.Controllers
         {
             _iFilesUploadRepository = iFilesUploadRepository;
         }
+
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -64,8 +65,8 @@ namespace Bshare.Controllers
 
                         fileUpload.FileDetails.Add(new FileDetail
                         {
-                            FileName = file.FileName, 
-                            FileSize = fileSizeMb, 
+                            FileName = file.FileName,
+                            FileSize = fileSizeMb,
                             FilePath = filePath
                         });
 
@@ -81,7 +82,7 @@ namespace Bshare.Controllers
 
                 return RedirectToAction(nameof(Upload));
             }
-            return View(Upload);
+            return View("Upload");
         }
 
         public IActionResult Index()
@@ -93,5 +94,27 @@ namespace Bshare.Controllers
         {
             return View();
         }
+
+
+        [Route("/{shortLink}")]
+        public async Task<IActionResult> ShortLinkPage(string shortLink)
+        {
+            bool shortLinkExists = await _iFilesUploadRepository.CheckShortLink(shortLink);
+            if (shortLinkExists)
+            {
+                ViewBag.Title = shortLink;
+                return View();
+            }
+            else
+            {
+                return View("BadLink");
+            }
+        }
+
+        public IActionResult BadLink()
+        {
+            return View();
+        }
+
     }
 }
