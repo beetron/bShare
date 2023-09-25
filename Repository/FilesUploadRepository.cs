@@ -65,43 +65,34 @@ namespace Bshare.Repository
             throw new NotImplementedException();
         }
 
-        public async Task<bool> CheckShortLink(string shortLink)
-        {
-            try
-            {
-                var result = await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f => f.ShortLink == shortLink);
-                if (result != null)
-                {
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Something went wrong during shortlink unique check");
-                return true;
-            }
-        }
-
+        // Short link generator with database check if link is unique
         public async Task<string> GenerateShortLink(int shortLinkLength)
         {
             string shortLink;
             FileUpload result;
 
-            do
+            try
             {
-                Random random = new Random();
-                const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12345679";
-                shortLink = new string(Enumerable.Repeat(chars, shortLinkLength).Select(s => s[random.Next(s.Length)])
-                    .ToArray());
+                do
+                {
+                    Random random = new Random();
+                    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz12345679";
+                    shortLink = new string(Enumerable.Repeat(chars, shortLinkLength)
+                        .Select(s => s[random.Next(s.Length)])
+                        .ToArray());
 
-                // Test if generated shortlink is unique 
-                result =
-                    await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f => f.ShortLink == shortLink);
-            } while (result != null);
+                    // Test if generated shortlink is unique 
+                    result =
+                        await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f => f.ShortLink == shortLink);
+                } while (result != null);
 
-            return shortLink;
-
+                return shortLink;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
     }
 }

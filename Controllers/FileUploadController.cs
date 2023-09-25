@@ -50,7 +50,7 @@ namespace Bshare.Controllers
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                // NEW FILE CODE TEST START
+                // Saving each file to storage, and adding FileDetails to list
                 foreach (var file in files)
                 {
                     if (file != null & file.Length > 0)
