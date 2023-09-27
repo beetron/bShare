@@ -8,3 +8,46 @@
 
 <h2>Short ShortLinkPageink Page</h2>
 <p>@ViewBag.Title</p>
+
+<div class="container">
+    <h2>File Upload Details</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <h3>File Description:</h3>
+            <p>@Model.FileDescription</p>
+
+            <h3>Short Link:</h3>
+            <p>@Model.ShortLink</p>
+
+            <h3>Date Expire:</h3>
+            <p>@Model.DateExpire.ToString("MM/dd - HH:MM")</p>
+        </div>
+
+        <div class="col-md-6">
+            <h3>File Details:</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>File Size</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var fileDetail in @Model.FileDetails)
+                {
+                    <tr>
+                        <td>@fileDetail.FileName</td>
+                        <td>@fileDetail.FileSize</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <h3>QR Image:</h3>
+    @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
+
+</div>

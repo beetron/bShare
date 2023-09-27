@@ -21,8 +21,7 @@ namespace Bshare.Db
             modelBuilder.Entity<FileDetail>()
                 .HasOne(a => a.FileUpload)
                 .WithMany(b => b.FileDetails)
-                .HasForeignKey(a => a.FileUploadId)
-                .IsRequired();
+                .HasForeignKey(a => a.FileUploadId);
 
             // Cascading delete behavior to remove any files tied with FileUploadID
             modelBuilder.Entity<FileUpload>()

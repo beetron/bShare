@@ -12,7 +12,6 @@ namespace Bshare.Controllers
         {
             _iFilesUploadRepository = iFilesUploadRepository;
         }
-
         
         // Create method to create & upload new file
         [HttpPost]
