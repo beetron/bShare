@@ -1,53 +1,84 @@
-﻿@model FileUpload
+﻿@using Microsoft.CodeAnalysis.CSharp.Syntax
+@model FileUpload
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?ShortLinkPageinkID=397860
 *@
 @{
-    
 }
 
-<h2>Short ShortLinkPageink Page</h2>
-<p>@ViewBag.Title</p>
+<head>
+    <style>
+        .custom-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="custom-container bg-dark text-light">
+                    <h2 class="text-center mb-4">File Upload Details</h2>
+                    <hr />
 
-<div class="container">
-    <h2>File Upload Details</h2>
-    <hr />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>File Description:</h4>
+                            <p>@Model.FileDescription</p>
 
-    <div class="row">
-        <div class="col-md-6">
-            <h3>File Description:</h3>
-            <p>@Model.FileDescription</p>
+                            <h4>Short Link:</h4>
+                            <p>@Model.ShortLink</p>
+                            
+                            <h4>Expires on:</h4>
+                            <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
+                            
+                            <h4>Qr Image:</h4>
+                            @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
+                        </div>
 
-            <h3>Short Link:</h3>
-            <p>@Model.ShortLink</p>
+                        <div class="col-md-6">
+                            <table class="table text-light">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>File Name</th>
+                                    <th>Size</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @{
+                                    int fileCount = 1;
+                                }
+                                @foreach (var fileDetail in Model.FileDetails)
+                                {
+                                    <tr>
+                                        <td>#@fileCount</td>
+                                        <td>@fileDetail.FileName</td>
+                                        <td>@fileDetail.FileSize.ToString("0.00") MB</td>
+                                    </tr>
+                                    fileCount++;
+                                }
+                                </tbody>
+                            </table>
+                            @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
+                            {
+                                string[] fileNames = Model.FileDetails.Select(f => f.FileName).ToArray();
+                                @for (int i = 0; i < fileNames.Length; i++)
+                                {
+                                    @Html.Hidden("fileNames[" + i + "]", fileNames[i])
+                                }
 
-            <h3>Date Expire:</h3>
-            <p>@Model.DateExpire.ToString("MM/dd - HH:MM")</p>
-        </div>
-
-        <div class="col-md-6">
-            <h3>File Details:</h3>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>File Name</th>
-                    <th>File Size</th>
-                </tr>
-                </thead>
-                <tbody>
-                @foreach (var fileDetail in @Model.FileDetails)
-                {
-                    <tr>
-                        <td>@fileDetail.FileName</td>
-                        <td>@fileDetail.FileSize</td>
-                    </tr>
-                }
-                </tbody>
-            </table>
+                                @Html.HiddenFor(model => model.ShortLink);
+                                @*@Html.HiddenFor(model => model.FileDetails.Select(f => f.FileName).ToArray());*@
+                                <button type="submit" class="btn btn-light">Download</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <h3>QR Image:</h3>
-    @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
-
-</div>
+</body>

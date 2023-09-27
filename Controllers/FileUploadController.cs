@@ -1,12 +1,16 @@
 ﻿using Bshare.Models;
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System.IO.Compression;
+using NuGet.Packaging;
+
 
 namespace Bshare.Controllers
 {
     public class FileUploadController : Controller
     {
         readonly IFilesUploadRepository _iFilesUploadRepository;
+        string _localFilePath = Environment.GetEnvironmentVariable("bshare_UploadLocation");
 
         public FileUploadController(IFilesUploadRepository iFilesUploadRepository)
         {
@@ -46,7 +50,7 @@ namespace Bshare.Controllers
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
 
                 // Create file directory if it doesn't exist
-                string directoryPath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink);
+                string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
@@ -62,7 +66,7 @@ namespace Bshare.Controllers
                         double fileSizeKb = fileSizeBytes / 1024;
                         double fileSizeMb = fileSizeKb / 1024;
 
-                        string filePath = Path.Combine(Environment.GetEnvironmentVariable("bshare_UploadLocation"), fileUpload.ShortLink, file.FileName);
+                        string filePath = Path.Combine(_localFilePath, fileUpload.ShortLink, file.FileName);
 
                         fileUpload.FileDetails.Add(new FileDetail
                         {
@@ -87,18 +91,6 @@ namespace Bshare.Controllers
             return View("Upload");
         }
 
-        // Get method to retrieve single data from UploadId
-        // [HttpGet]
-        // [ValidateAntiForgeryToken]
-        // public async Task<IActionResult> GetById(FileUpload fileUpload, int uploadId)
-        // {
-        //     FileUpload fileRecord = await _iFilesUploadRepository.GetById(uploadId);
-        //     if (fileRecord != null)
-        //     {
-        //     }
-        //
-        // }
-
         public IActionResult Index()
         {
             return View();
@@ -110,6 +102,7 @@ namespace Bshare.Controllers
         }
 
 
+        // Redirects to short link URL if the short link exists in database
         [Route("/{shortLink}")]
         public async Task<IActionResult> ShortLink(string shortLink)
         {
@@ -118,7 +111,6 @@ namespace Bshare.Controllers
             {
                 FileUpload fileRecord = await _iFilesUploadRepository.GetByShortLink(shortLink);
 
-                ViewBag.Title = shortLink;
                 return View(fileRecord);
             }
             else
@@ -132,5 +124,41 @@ namespace Bshare.Controllers
             return View();
         }
 
+        // Download single file, or multiple as Zip
+        [Route("/file/Download")]
+        public IActionResult DownloadFile(FileUpload fileUpload, string[] fileNames)
+        {
+
+            string fileLocation;
+            string fileName;
+            MemoryStream memoryStream = new MemoryStream();
+
+            // Check if more than 1 file
+            // if (fileUpload.FileDetails.Select(f => f.FileName).Count() >= 2)
+            if (fileNames.Length >= 2)
+            {
+                fileLocation = Path.Combine(_localFilePath + fileUpload.ShortLink);
+                fileName = fileUpload.ShortLink + "/file.zip";
+                string fileDestination = fileLocation + ".zip";
+
+                // using (ZipArchive zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                // {
+                //     fileName = "bShareDownload.zip";
+                //     // zipArchive.CreateEntryFromFile(fileLocation, "test");
+                //     
+                // }
+
+                ZipFile.CreateFromDirectory(fileLocation, fileDestination);
+
+
+                    // Set memory stream back to beginning
+                    //memoryStream.Position = 0;
+
+                //return File(memoryStream, "application/zip", "bShareFiles.zip");
+            }
+
+            return null;
+
+        }
     }
 }

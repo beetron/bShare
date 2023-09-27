@@ -17,6 +17,8 @@ namespace Bshare.Db
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Ignore<ShortLinkViewModel>();
+
             // One-to-many relationship
             modelBuilder.Entity<FileDetail>()
                 .HasOne(a => a.FileUpload)
