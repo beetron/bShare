@@ -5,7 +5,7 @@ namespace Bshare.Repository
     public interface IFilesUploadRepository
     {
         Task<List<FileUpload>> GetAllAsync();
-        Task<FileUpload> GetByIdAsync(int id);
+        Task<FileUpload> GetByShortLink(string shortLink);
         Task CreateFileUploadAsync(FileUpload fileUpload);
         Task CreateFileDetailAsync(FileDetail fileDetail);
         Task DeleteAsync(int id);

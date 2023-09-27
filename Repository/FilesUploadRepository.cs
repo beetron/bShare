@@ -22,9 +22,18 @@ namespace Bshare.Repository
         }
 
         // Get single upload record by id (used for link sharing and edits)
-        public async Task<FileUpload> GetByIdAsync(int id)
+        public async Task<FileUpload> GetByShortLink(string shortLink)
         {
-            return _fileUploadContext.FileUploads.FirstOrDefault(p => p.FileUploadId == id);
+            try
+            {
+                return _fileUploadContext.FileUploads.FirstOrDefault(x => x.ShortLink == "shortLink");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return null;
         }
 
         // Create new file upload

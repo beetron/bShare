@@ -14,10 +14,12 @@ namespace Bshare.Controllers
         }
 
         
+        // Create method to create & upload new file
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(510 * 1024 * 1024)] // Total 510mb
         [RequestFormLimits(MultipartBodyLengthLimit = 505 * 1024 * 1024)] // Form data 505mb
+        [Route ("/file/create")]
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
             if (ModelState.IsValid)
@@ -37,8 +39,8 @@ namespace Bshare.Controllers
                         fileUpload.DateExpire = DateTime.Now.AddHours(48);
                         break;
 
-                    default:
-                        break;
+                    //default:
+                    //    break;
                 }
 
                 // Generate short link and check database if unique
@@ -81,9 +83,22 @@ namespace Bshare.Controllers
                 await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
                 return RedirectToAction(nameof(Upload));
+                //return View("Upload");
             }
             return View("Upload");
         }
+
+        // Get method to retrieve single data from UploadId
+        // [HttpGet]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> GetById(FileUpload fileUpload, int uploadId)
+        // {
+        //     FileUpload fileRecord = await _iFilesUploadRepository.GetById(uploadId);
+        //     if (fileRecord != null)
+        //     {
+        //     }
+        //
+        // }
 
         public IActionResult Index()
         {
@@ -97,13 +112,15 @@ namespace Bshare.Controllers
 
 
         [Route("/{shortLink}")]
-        public async Task<IActionResult> ShortLinkPage(string shortLink)
+        public async Task<IActionResult> ShortLink(string shortLink)
         {
             bool shortLinkExists = await _iFilesUploadRepository.CheckShortLink(shortLink);
             if (shortLinkExists)
             {
+                FileUpload fileRecord = await _iFilesUploadRepository.GetByShortLink(shortLink);
+
                 ViewBag.Title = shortLink;
-                return View();
+                return View(fileRecord);
             }
             else
             {
