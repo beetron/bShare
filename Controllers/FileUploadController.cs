@@ -2,6 +2,7 @@
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
+using Bshare.Services;
 using NuGet.Packaging;
 
 
@@ -10,11 +11,13 @@ namespace Bshare.Controllers
     public class FileUploadController : Controller
     {
         readonly IFilesUploadRepository _iFilesUploadRepository;
+        readonly IStoreFileService _iStoreFileService;
         string _localFilePath = Environment.GetEnvironmentVariable("bshare_UploadLocation");
 
-        public FileUploadController(IFilesUploadRepository iFilesUploadRepository)
+        public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IStoreFileService iStoreFileService)
         {
             _iFilesUploadRepository = iFilesUploadRepository;
+            _iStoreFileService = iStoreFileService;
         }
         
         // Create method to create & upload new file
@@ -46,41 +49,11 @@ namespace Bshare.Controllers
                     //    break;
                 }
 
-                // Generate short link and check database if unique
+                // Generate short link and check database if unique (6 characters specified)
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
 
-                // Create file directory if it doesn't exist
-                string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
-                if (!Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                // Saving each file to storage, and adding FileDetails to list
-                foreach (var file in files)
-                {
-                    if (file != null & file.Length > 0)
-                    {
-                        // Get file size in MB format
-                        double fileSizeBytes = file.Length;
-                        double fileSizeKb = fileSizeBytes / 1024;
-                        double fileSizeMb = fileSizeKb / 1024;
-
-                        string filePath = Path.Combine(_localFilePath, fileUpload.ShortLink, file.FileName);
-
-                        fileUpload.FileDetails.Add(new FileDetail
-                        {
-                            FileName = file.FileName,
-                            FileSize = fileSizeMb,
-                            FilePath = filePath
-                        });
-
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-                    }
-                }
+                // Create new directory and save files to local storage
+                fileUpload.FileDetails = await _iStoreFileService.StoreFile(fileUpload, files, _localFilePath);
 
                 // Save database tables
                 await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);

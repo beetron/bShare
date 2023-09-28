@@ -1,10 +1,11 @@
 ﻿using Bshare.Models;
+using Microsoft.CodeAnalysis.Elfie.PDB;
 
 namespace Bshare.Services
 {
     public class StoreFileService : IStoreFileService
     {
-        public async Task<FileDetail> StoreFile(FileUpload fileUpload, List<IFormFile> files, string _localFilePath)
+        public async Task<ICollection<FileDetail>> StoreFile(FileUpload fileUpload, List<IFormFile> files, string _localFilePath)
         {
             // Create file directory if it doesn't exist
             string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
@@ -39,6 +40,8 @@ namespace Bshare.Services
                     }
                 }
             }
+
+            return fileUpload.FileDetails;
         }
     }
 }

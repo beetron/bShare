@@ -1,6 +1,7 @@
 
 using Bshare.Db;
 using Bshare.Repository;
+using Bshare.Services;
 using Microsoft.EntityFrameworkCore;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -42,6 +43,9 @@ namespace Bshare
 
             // Dependency injection for IFileUpload repository
             builder.Services.AddScoped<IFilesUploadRepository, FilesUploadRepository>();
+
+            // Dependency injection for IStoreFileService
+            builder.Services.AddScoped<IStoreFileService, StoreFileService>();
 
             var app = builder.Build();
 
