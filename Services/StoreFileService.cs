@@ -16,32 +16,39 @@ namespace Bshare.Services
             }
 
             // Saving each file to local storage, and adding FileDetails to list
-            foreach (var file in files)
+            try
             {
-                if (file != null & file.Length > 0)
+                foreach (var file in files)
                 {
-                    // Get file size in MB format
-                    double fileSizeBytes = file.Length;
-                    double fileSizeKb = fileSizeBytes / 1024;
-                    double fileSizeMb = fileSizeKb / 1024;
-
-                    string filePath = Path.Combine(_localFilePath, fileUpload.ShortLink, file.FileName);
-
-                    fileUpload.FileDetails.Add(new FileDetail
+                    if (file != null & file.Length > 0)
                     {
-                        FileName = file.FileName,
-                        FileSize = fileSizeMb,
-                        FilePath = filePath
-                    });
+                        // Get file size in MB format
+                        double fileSizeBytes = file.Length;
+                        double fileSizeKb = fileSizeBytes / 1024;
+                        double fileSizeMb = fileSizeKb / 1024;
 
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
+                        string filePath = Path.Combine(_localFilePath, fileUpload.ShortLink, file.FileName);
+
+                        fileUpload.FileDetails.Add(new FileDetail
+                        {
+                            FileName = file.FileName,
+                            FileSize = fileSizeMb,
+                            FilePath = filePath
+                        });
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await file.CopyToAsync(stream);
+                        }
                     }
                 }
-            }
 
-            return fileUpload.FileDetails;
+                return fileUpload.FileDetails;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }
