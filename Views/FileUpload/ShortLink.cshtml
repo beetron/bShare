@@ -74,9 +74,10 @@
                                 {
                                     @Html.Hidden("fileNames[" + i + "]", fileNames[i])
                                 }
-
-                                @Html.HiddenFor(model => model.ShortLink)
-                                <button type="submit" class="btn btn-light align-content-end">Download All</button>
+                                @if (fileNames.Length >= 2)
+                                {
+                                    <button type="submit" class="btn btn-light align-content-end">Download All</button>
+                                }
                             }
                         </div>
                     </div>
