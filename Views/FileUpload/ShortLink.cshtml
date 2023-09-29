@@ -1,8 +1,4 @@
-﻿@using Microsoft.CodeAnalysis.CSharp.Syntax
-@model FileUpload
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?ShortLinkPageinkID=397860
-*@
+﻿@model FileUpload
 @{
 }
 
@@ -54,11 +50,19 @@
                                 }
                                 @foreach (var fileDetail in Model.FileDetails)
                                 {
-                                    <tr>
-                                        <td>#@fileCount</td>
-                                        <td>@fileDetail.FileName</td>
-                                        <td>@fileDetail.FileSize.ToString("0.00") MB</td>
-                                    </tr>
+                                    @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
+                                    {
+                                        <tr>
+                                            <td>#@fileCount</td>
+                                            <td>@fileDetail.FileName</td>
+                                            <td>@fileDetail.FileSize.ToString("0.00") MB</td>
+                                            <td>
+                                                @Html.Hidden("fileName", @fileDetail.FileName)
+                                                @Html.HiddenFor(model => model.ShortLink)
+                                                <button type="submit" class="btn btn-light">Download</button>
+                                            </td>
+                                        </tr>
+                                    }
                                     fileCount++;
                                 }
                                 </tbody>
@@ -71,9 +75,8 @@
                                     @Html.Hidden("fileNames[" + i + "]", fileNames[i])
                                 }
 
-                                @Html.HiddenFor(model => model.ShortLink);
-                                @*@Html.HiddenFor(model => model.FileDetails.Select(f => f.FileName).ToArray());*@
-                                <button type="submit" class="btn btn-light">Download</button>
+                                @Html.HiddenFor(model => model.ShortLink)
+                                <button type="submit" class="btn btn-light align-content-end">Download All</button>
                             }
                         </div>
                     </div>

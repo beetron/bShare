@@ -3,8 +3,6 @@ using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 using Bshare.Services;
-using NuGet.Packaging;
-
 
 namespace Bshare.Controllers
 {
@@ -99,39 +97,59 @@ namespace Bshare.Controllers
 
         // Download single file, or multiple as Zip
         [Route("/file/Download")]
-        public IActionResult DownloadFile(FileUpload fileUpload, string[] fileNames)
+        public IActionResult DownloadFile(FileUpload fileUpload, string[] fileNames, string fileName)
         {
-
-            string fileLocation;
-            string fileName;
-            MemoryStream memoryStream = new MemoryStream();
-
-            // Check if more than 1 file
-            // if (fileUpload.FileDetails.Select(f => f.FileName).Count() >= 2)
-            if (fileNames.Length >= 2)
+            if (!ModelState.IsValid)
             {
-                fileLocation = Path.Combine(_localFilePath + fileUpload.ShortLink);
-                fileName = fileUpload.ShortLink + "/file.zip";
-                string fileDestination = fileLocation + ".zip";
+                // Handle ModelState errors here or log them for debugging
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    // Log or handle the error as needed
+                }
 
-                // using (ZipArchive zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
-                // {
-                //     fileName = "bShareDownload.zip";
-                //     // zipArchive.CreateEntryFromFile(fileLocation, "test");
-                //     
-                // }
-
-                ZipFile.CreateFromDirectory(fileLocation, fileDestination);
-
-
-                    // Set memory stream back to beginning
-                    //memoryStream.Position = 0;
-
-                //return File(memoryStream, "application/zip", "bShareFiles.zip");
+                // You can also choose to return a view or an error message here
+                // Example: return View("ErrorViewName");
             }
 
-            return null;
+            string fileLocation = Path.Combine(_localFilePath + fileUpload.ShortLink);
+            string fileNameZip = fileUpload.ShortLink + ".zip";
+            string fileNameSingle = "/" + fileName;
 
+            // Multiple file download as Zip
+            if (fileNames.Length >= 2)
+            {
+                string fileDestination = Path.Combine(_localFilePath, fileNameZip);
+
+                // Create zip file
+                if (!System.IO.File.Exists(fileDestination))
+                {
+                    ZipFile.CreateFromDirectory(fileLocation, fileDestination);
+                }
+
+                using MemoryStream memoryStream = new MemoryStream();
+                using (FileStream fileStream = new FileStream(fileDestination, FileMode.Open))
+                {
+                    fileStream.CopyTo(memoryStream);
+                }
+
+                return File(memoryStream.ToArray(), "application/zip", fileNameZip);
+            }
+
+            // Single file download
+            if (!String.IsNullOrEmpty(fileName))
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (FileStream fileStream = new FileStream(fileLocation + fileNameSingle, FileMode.Open))
+                    {
+                        fileStream.CopyTo(memoryStream);
+                    }
+
+                    return File(memoryStream.ToArray(), "image/*", fileNameSingle);
+                }
+            }
+            return Ok();
         }
     }
 }
