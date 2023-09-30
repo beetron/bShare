@@ -158,5 +158,15 @@ namespace Bshare.Controllers
             }
             return Ok();
         }
+
+        // Delete Upload
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("/file/Delete")]
+        public async Task<IActionResult> DeleteUpload(FileUpload fileUpload)
+        {
+            await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);
+            return View("Upload");
+        }
     }
 }

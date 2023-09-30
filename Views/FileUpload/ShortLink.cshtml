@@ -79,6 +79,11 @@
                                     <button type="submit" class="btn btn-light align-content-end">Download All</button>
                                 }
                             }
+                            @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post))
+                            {
+                                @Html.HiddenFor(Model => Model.FileUploadId)
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            }
                         </div>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 using Bshare.Db;
 using Bshare.Functions;
 using Bshare.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bshare.Repository
@@ -71,12 +72,12 @@ namespace Bshare.Repository
             }
         }
 
-        // Delete a single upload record by id
-        public async Task DeleteAsync(int id)
+        // Delete a single upload record by FileUploadId
+        public async Task DeleteAsync(int fileUploadId)
         {
             try
             {
-                var record = await _fileUploadContext.FileUploads.FindAsync(id);
+                var record = await _fileUploadContext.FileUploads.FindAsync(fileUploadId);
                 if (record != null)
                 {
                     _fileUploadContext.FileUploads.Remove(record);
@@ -87,8 +88,6 @@ namespace Bshare.Repository
             {
                 Console.WriteLine(ex);
             }
-
-            throw new NotImplementedException();
         }
         
         // Check database for short link
