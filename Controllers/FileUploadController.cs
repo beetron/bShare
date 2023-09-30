@@ -26,6 +26,8 @@ namespace Bshare.Controllers
         [Route ("/file/create")]
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
+            fileUpload.Password = "";
+
             if (ModelState.IsValid)
             {
                 fileUpload.DateUpload = DateTime.Now;
@@ -59,6 +61,7 @@ namespace Bshare.Controllers
                 return RedirectToAction(nameof(Upload));
                 //return View("Upload");
             }
+            // return View("Upload");
             return View("Upload");
         }
 
@@ -69,7 +72,11 @@ namespace Bshare.Controllers
 
         public IActionResult Upload()
         {
-            return View();
+            FileUpload fileUpload = new FileUpload
+            {
+                Password = ""
+            };
+            return View("Upload", fileUpload);
         }
 
 
