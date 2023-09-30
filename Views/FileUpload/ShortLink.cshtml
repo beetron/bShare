@@ -72,6 +72,7 @@
                                 string[] fileNames = Model.FileDetails.Select(f => f.FileName).ToArray();
                                 @for (int i = 0; i < fileNames.Length; i++)
                                 {
+                                    @Html.HiddenFor(model => model.ShortLink)
                                     @Html.Hidden("fileNames[" + i + "]", fileNames[i])
                                 }
                                 @if (fileNames.Length >= 2)
@@ -81,7 +82,8 @@
                             }
                             @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post))
                             {
-                                @Html.HiddenFor(Model => Model.FileUploadId)
+                                @Html.HiddenFor(model => model.ShortLink)
+                                @Html.HiddenFor(model => model.FileUploadId)
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             }
                         </div>

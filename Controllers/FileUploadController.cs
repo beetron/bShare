@@ -9,13 +9,13 @@ namespace Bshare.Controllers
     public class FileUploadController : Controller
     {
         readonly IFilesUploadRepository _iFilesUploadRepository;
-        readonly IStoreFileService _iStoreFileService;
+        readonly IFileService _iFileService;
         string _localFilePath = Environment.GetEnvironmentVariable("bshare_UploadLocation");
 
-        public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IStoreFileService iStoreFileService)
+        public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IFileService iFileService)
         {
             _iFilesUploadRepository = iFilesUploadRepository;
-            _iStoreFileService = iStoreFileService;
+            _iFileService = iFileService;
         }
         
         // Create method to create & upload new file
@@ -26,8 +26,7 @@ namespace Bshare.Controllers
         [Route ("/file/create")]
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
-            fileUpload.Password = "";
-
+            
             if (ModelState.IsValid)
             {
                 fileUpload.DateUpload = DateTime.Now;
@@ -53,12 +52,14 @@ namespace Bshare.Controllers
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
 
                 // Create new directory and save files to local storage
-                fileUpload.FileDetails = await _iStoreFileService.StoreFile(fileUpload, files, _localFilePath);
+                fileUpload.FileDetails = await _iFileService.SaveFileAsync(fileUpload, files, _localFilePath);
 
                 // Save database tables
                 await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
-                return RedirectToAction(nameof(Upload));
+                //return RedirectToAction(nameof(fileUpload.ShortLink));
+                //return RedirectToAction("", "", new { id = fileUpload.ShortLink });
+                return Redirect($"/{fileUpload.ShortLink}");
                 //return View("Upload");
             }
             // return View("Upload");
@@ -140,7 +141,15 @@ namespace Bshare.Controllers
                     fileStream.CopyTo(memoryStream);
                 }
 
-                return File(memoryStream.ToArray(), "application/zip", fileNameZip);
+                // Save into memory stream
+                var fileResult = File(memoryStream.ToArray(), "application/zip", fileNameZip);
+
+                // Remove zip file
+                System.IO.File.Delete(fileDestination);
+
+                // Return stored zip from memory stream
+                return fileResult;
+
             }
 
             // Single file download
@@ -165,8 +174,10 @@ namespace Bshare.Controllers
         [Route("/file/Delete")]
         public async Task<IActionResult> DeleteUpload(FileUpload fileUpload)
         {
+            await _iFileService.DeleteFileAsync(fileUpload, _localFilePath);
             await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);
-            return View("Upload");
+            //return View("Upload");
+            return Redirect($"/");
         }
     }
 }

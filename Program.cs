@@ -44,8 +44,8 @@ namespace Bshare
             // Dependency injection for IFileUpload repository
             builder.Services.AddScoped<IFilesUploadRepository, FilesUploadRepository>();
 
-            // Dependency injection for IStoreFileService
-            builder.Services.AddScoped<IStoreFileService, StoreFileService>();
+            // Dependency injection for IFileService
+            builder.Services.AddScoped<IFileService, FileService>();
 
             var app = builder.Build();
 

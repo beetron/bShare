@@ -1,15 +1,17 @@
 ﻿using Bshare.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.CodeAnalysis.Elfie.PDB;
 
 namespace Bshare.Services
 {
-    public class StoreFileService : IStoreFileService
+    public class FileService : IFileService
     {
-        public async Task<ICollection<FileDetail>> StoreFile(FileUpload fileUpload, List<IFormFile> files, string _localFilePath)
+        // Save physical file on server
+        public async Task<ICollection<FileDetail>> SaveFileAsync(FileUpload fileUpload, List<IFormFile> files, string _localFilePath)
         {
-            // Create file directory if it doesn't exist
             string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
 
+            // Create file directory if it doesn't exist
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
@@ -49,6 +51,19 @@ namespace Bshare.Services
             {
                 throw;
             }
+        }
+
+        // Delete physical file from server
+        public async Task<ICollection<FileDetail>> DeleteFileAsync(FileUpload fileUpload, string _localFilePath)
+        {
+            string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
+
+            if (Directory.Exists(directoryPath))
+            {
+                Directory.Delete(directoryPath, true);
+                return null;
+            }
+            return null;
         }
     }
 }
