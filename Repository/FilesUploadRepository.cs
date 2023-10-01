@@ -23,7 +23,7 @@ namespace Bshare.Repository
         }
 
         // Get single upload record by short link
-        public async Task<FileUpload> GetByShortLink(string shortLink)
+        public async Task<FileUpload> GetByShortLinkAsync(string shortLink)
         {
             try
             {
@@ -58,20 +58,6 @@ namespace Bshare.Repository
             //return Task.CompletedTask;
         }
 
-        // Create new file detail
-        public async Task CreateFileDetailAsync(FileDetail fileDetail)
-        {
-            try
-            {
-                await _fileUploadContext.FileDetails.AddAsync(fileDetail);
-                await _fileUploadContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.Write(ex);
-            }
-        }
-
         // Delete a single upload record by FileUploadId
         public async Task DeleteAsync(int fileUploadId)
         {
@@ -91,7 +77,7 @@ namespace Bshare.Repository
         }
         
         // Check database for short link
-        public async Task<bool> CheckShortLink(string shortLink)
+        public async Task<bool> CheckShortLinkAsync(string shortLink)
         {
             try
             {
@@ -111,7 +97,7 @@ namespace Bshare.Repository
         }
 
         // Short link generator with database check if link is unique
-        public async Task<string> GenerateShortLink(int shortLinkLength)
+        public async Task<string> GenerateShortLinkAsync(int shortLinkLength)
         {
             string shortLink = "";
             FileUpload result;
@@ -138,6 +124,28 @@ namespace Bshare.Repository
                 Console.WriteLine(ex);
                 return shortLink;
             }
+        }
+
+        public async Task<bool> CheckPasswordAsync(FileUpload fileUpload, string password)
+        {
+            try
+            {
+                FileUpload matchingFileUploadData =
+                    await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f =>
+                        f.FileUploadId == fileUpload.FileUploadId);
+
+                if (matchingFileUploadData != null)
+                {
+                    return matchingFileUploadData.Password == password;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
+
+            return false;
         }
     }
 }

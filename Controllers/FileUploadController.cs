@@ -49,7 +49,7 @@ namespace Bshare.Controllers
                 }
 
                 // Generate short link and check database if unique (6 characters specified)
-                fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLink(6);
+                fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLinkAsync(6);
 
                 // Create new directory and save files to local storage
                 fileUpload.FileDetails = await _iFileService.SaveFileAsync(fileUpload, files, _localFilePath);
@@ -85,10 +85,10 @@ namespace Bshare.Controllers
         [Route("/{shortLink}")]
         public async Task<IActionResult> ShortLink(string shortLink)
         {
-            bool shortLinkExists = await _iFilesUploadRepository.CheckShortLink(shortLink);
+            bool shortLinkExists = await _iFilesUploadRepository.CheckShortLinkAsync(shortLink);
             if (shortLinkExists)
             {
-                FileUpload fileRecord = await _iFilesUploadRepository.GetByShortLink(shortLink);
+                FileUpload fileRecord = await _iFilesUploadRepository.GetByShortLinkAsync(shortLink);
 
                 return View(fileRecord);
             }
@@ -174,10 +174,16 @@ namespace Bshare.Controllers
         [Route("/file/Delete")]
         public async Task<IActionResult> DeleteUpload(FileUpload fileUpload)
         {
-            await _iFileService.DeleteFileAsync(fileUpload, _localFilePath);
-            await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);
-            //return View("Upload");
-            return Redirect($"/");
+            // Check if password is correct
+            if (await _iFilesUploadRepository.CheckPasswordAsync(fileUpload, fileUpload.Password))
+            {
+                await _iFileService.DeleteFileAsync(fileUpload, _localFilePath);
+                await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);
+                //return View("Upload");
+                return Redirect("/");
+            }
+
+            return Redirect($"/{fileUpload.ShortLink}");
         }
     }
 }

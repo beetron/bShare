@@ -13,29 +13,29 @@
     </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
         <div class="row">
-            <div class="col-md-12">
-                <div class="custom-container bg-dark text-light">
+            <div class="col">
+                <div class="custom-container bg-dark text-light justify-content-center">
                     <h2 class="text-center mb-4">File Upload Details</h2>
                     <hr />
-
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col">
                             <h4>File Description:</h4>
                             <p>@Model.FileDescription</p>
 
                             <h4>Short Link:</h4>
                             <p>@Model.ShortLink</p>
-                            
+
                             <h4>Expires on:</h4>
                             <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
-                            
+
                             <h4>Qr Image:</h4>
                             @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
                         </div>
-
-                        <div class="col-md-6">
+                    </div>
+                    <div class="row justify-content-start">
+                        <div class="col">
                             <table class="table text-light">
                                 <thead>
                                 <tr>
@@ -67,6 +67,10 @@
                                 }
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col text-end">
                             @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
                             {
                                 string[] fileNames = Model.FileDetails.Select(f => f.FileName).ToArray();
@@ -80,13 +84,24 @@
                                     <button type="submit" class="btn btn-light align-content-end">Download All</button>
                                 }
                             }
-                            @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post))
-                            {
+                        </div>
+                    </div>
+                    <div class="row">
+                        @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post))
+                        {
+                            // Delete button
+                            <div class="col-9 pt-2">
                                 @Html.HiddenFor(model => model.ShortLink)
                                 @Html.HiddenFor(model => model.FileUploadId)
                                 <button type="submit" class="btn btn-danger">Delete</button>
-                            }
-                        </div>
+                            </div>
+                            // Password input
+                            <div class="form-group col-3 pt-2">
+                                <input type="password" class="form-control" id="Password" name="Password" maxLength="12">
+                                @Html.HiddenFor(model => model.Password)
+                                @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
