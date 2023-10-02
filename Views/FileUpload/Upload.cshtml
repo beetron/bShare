@@ -1,41 +1,18 @@
 ﻿﻿@using System.Security.Cryptography.X509Certificates
 @model FileUpload
-
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?AccessShortLinkinkID=397860
-*@
 @{
 }
-<head>
-    <style>
-        .custom-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-        .custom-width {
-            width: 150px;
-        }
-        .file-description-width {
-            width: 400px;
-        }
-        .password{}
 
-    </style>
-</head>
-
-<h2>Create New File Upload</h2>
 @using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <div class="container mt-5">
+    <div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
         <div class="row">
-            <div class="col-12 col-md-10 col-lg-6">
+            <div class="col">
                 <div class="custom-container bg-dark text-light">
 
                     @*File description input*@
-                    <div class="form-group p-2">
+                    <div class="form-group pt-2">
                         <p>File Description</p>
                         @Html.TextBoxFor(model => model.FileDescription, 
                             new
@@ -47,13 +24,25 @@
                     </div>
 
                     @*File selection*@
-                    <div class="form-group p-1">
+                    <div class="form-group pt-4">
                         <label for="files" class="control-label"></label>
-                        <input type="file" id="files" name="files" multiple/>
-                        <div id="selectedFileDetails"></div>
+                        <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails()" />
+
+                        <div id="selectedFileDetails" class="pt-4" style="display: none;">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Size (MB)</th>
+                                </tr>
+                                </thead>
+                                <tbody id="fileListBody">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     
-                    <div class="form-group p-2">
+                    <div class="form-group pt-5">
                         <div class="row text-start">
                             @*DateExpire selection*@
                             <div class="col-6">
@@ -83,6 +72,7 @@
                         </div>
                         <div class="form-group pt-3">
                             <input type="submit" value="Create" class="btn btn-warning"/>
+                            
                         </div>
                     </div>
                     <div>
@@ -92,9 +82,22 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="message" value="@ViewBag.Message" />
 }
 
 <script>
+    // Show alert if Creating without any file selected
+    function showAlertIfConditionMet() {
+        var message = document.getElementById('message').value;
+        if (message) {
+            Swal.fire({
+                title: '',
+                text: '@ViewBag.Message',
+                icon: 'error',
+            });
+        }
+    }
+    showAlertIfConditionMet();
 
     // Detect character input and update character count
     function charUpdate() {
@@ -102,4 +105,46 @@
         document.getElementById('charCountDisplay').innerHTML = length + " / 12 characters";
     }
 
+    // Display file details after selection
+    function displaySelectedFileDetails() {
+        var filesInput = document.getElementById('files');
+        var fileListBody = document.getElementById('fileListBody');
+
+        // Clear the existing table body
+        fileListBody.innerHTML = '';
+
+        // Check if more than one file is selected
+        if (filesInput.files.length > 0) {
+            // Show the selectedFileDetails div
+            document.getElementById('selectedFileDetails').style.display = 'block';
+
+            // Loop through the selected files and display file name and file size
+            for (var i = 0; i < filesInput.files.length; i++) {
+                var file = filesInput.files[i];
+                var fileName = file.name;
+                var fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
+
+                // Create a new table row (tr)
+                var row = document.createElement('tr');
+
+                // Create table data cells (td) for file name and file size
+                var fileNameCell = document.createElement('td');
+                var fileSizeCell = document.createElement('td');
+
+                // Set the text content of the cells
+                fileNameCell.textContent = fileName;
+                fileSizeCell.textContent = fileSize;
+
+                // Append the cells to the row
+                row.appendChild(fileNameCell);
+                row.appendChild(fileSizeCell);
+
+                // Append the row to the table body
+                fileListBody.appendChild(row);
+            }
+        } else {
+            // Hide the selectedFileDetails div when no files are selected
+            document.getElementById('selectedFileDetails').style.display = 'none';
+        }
+    }
 </script>

@@ -130,6 +130,11 @@ namespace Bshare.Repository
         {
             try
             {
+                if (String.IsNullOrEmpty(password))
+                {
+                    return false;
+                }
+
                 FileUpload matchingFileUploadData =
                     await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f =>
                         f.FileUploadId == fileUpload.FileUploadId);

@@ -26,6 +26,12 @@ namespace Bshare.Controllers
         [Route ("/file/create")]
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
+            if (files.Count == 0)
+            {
+                ViewBag.Message = "No file attached";
+                // return View("Upload", ViewBag.Message);
+                return View("Upload");
+            }
             
             if (ModelState.IsValid)
             {
@@ -73,11 +79,12 @@ namespace Bshare.Controllers
 
         public IActionResult Upload()
         {
-            FileUpload fileUpload = new FileUpload
-            {
-                Password = ""
-            };
-            return View("Upload", fileUpload);
+            // FileUpload fileUpload = new FileUpload
+            // {
+            //     Password = ""
+            // };
+            // return View("Upload", fileUpload);
+            return View("Upload");
         }
 
 
@@ -177,12 +184,16 @@ namespace Bshare.Controllers
             // Check if password is correct
             if (await _iFilesUploadRepository.CheckPasswordAsync(fileUpload, fileUpload.Password))
             {
+                // Delete physical files on server
                 await _iFileService.DeleteFileAsync(fileUpload, _localFilePath);
+
+                // Delete file upload record from database
                 await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);
-                //return View("Upload");
+
                 return Redirect("/");
             }
 
+            TempData["message"] = "Wrong password";
             return Redirect($"/{fileUpload.ShortLink}");
         }
     }

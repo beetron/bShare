@@ -1,8 +1,9 @@
-﻿@model FileUpload
+﻿@using Microsoft.AspNetCore.Hosting.StaticWebAssets
+@model FileUpload
 @{
 }
 
-<head>
+@*<head>
     <style>
         .custom-container {
             background-color: white;
@@ -11,100 +12,134 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
     </style>
-</head>
-<body>
-    <div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
-        <div class="row">
-            <div class="col">
-                <div class="custom-container bg-dark text-light justify-content-center">
-                    <h2 class="text-center mb-4">File Upload Details</h2>
-                    <hr />
-                    <div class="row">
-                        <div class="col">
-                            <h4>File Description:</h4>
-                            <p>@Model.FileDescription</p>
+</head>*@
 
-                            <h4>Short Link:</h4>
-                            <p>@Model.ShortLink</p>
+<div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
+    <div class="row">
+        <div class="col">
+            <div class="custom-container bg-dark text-light justify-content-center">
+                <h2 class="text-center mb-4">File Upload Details</h2>
+                <hr />
+                <div class="row">
+                    <div class="col">
+                        <h4>File Description:</h4>
+                        <p>@Model.FileDescription</p>
 
-                            <h4>Expires on:</h4>
-                            <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
+                        <h4>Short Link:</h4>
+                        <p>@Model.ShortLink</p>
 
-                            <h4>Qr Image:</h4>
-                            @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
-                        </div>
+                        <h4>Expires on:</h4>
+                        <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
+
+                        <h4>Qr Image:</h4>
+                        @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
                     </div>
-                    <div class="row justify-content-start">
-                        <div class="col">
-                            <table class="table text-light">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>File Name</th>
-                                    <th>Size</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @{
-                                    int fileCount = 1;
-                                }
-                                @foreach (var fileDetail in Model.FileDetails)
-                                {
-                                    @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
-                                    {
-                                        <tr>
-                                            <td>#@fileCount</td>
-                                            <td>@fileDetail.FileName</td>
-                                            <td>@fileDetail.FileSize.ToString("0.00") MB</td>
-                                            <td>
-                                                @Html.Hidden("fileName", @fileDetail.FileName)
-                                                @Html.HiddenFor(model => model.ShortLink)
-                                                <button type="submit" class="btn btn-light">Download</button>
-                                            </td>
-                                        </tr>
-                                    }
-                                    fileCount++;
-                                }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col text-end">
-                            @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
-                            {
-                                string[] fileNames = Model.FileDetails.Select(f => f.FileName).ToArray();
-                                @for (int i = 0; i < fileNames.Length; i++)
-                                {
-                                    @Html.HiddenFor(model => model.ShortLink)
-                                    @Html.Hidden("fileNames[" + i + "]", fileNames[i])
-                                }
-                                @if (fileNames.Length >= 2)
-                                {
-                                    <button type="submit" class="btn btn-light align-content-end">Download All</button>
-                                }
+                </div>
+                <div class="row justify-content-start">
+                    <div class="col">
+                        <table class="table text-light">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th>File Name</th>
+                                <th>Size</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @{
+                                int fileCount = 1;
                             }
-                        </div>
+                            @foreach (var fileDetail in Model.FileDetails)
+                            {
+                                @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
+                                {
+                                    <tr>
+                                        <td>#@fileCount</td>
+                                        <td>@fileDetail.FileName</td>
+                                        <td>@fileDetail.FileSize.ToString("0.00") MB</td>
+                                        <td>
+                                            @Html.Hidden("fileName", @fileDetail.FileName)
+                                            @Html.HiddenFor(model => model.ShortLink)
+                                            <button type="submit" class="btn btn-light">Download</button>
+                                        </td>
+                                    </tr>
+                                }
+                                fileCount++;
+                            }
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="row">
-                        @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post))
+                </div>
+                <div class="row">
+                    <div class="col text-end">
+                        @using (Html.BeginForm("DownloadFile", "FileUpload", FormMethod.Post))
                         {
-                            // Delete button
-                            <div class="col-9 pt-2">
+                            string[] fileNames = Model.FileDetails.Select(f => f.FileName).ToArray();
+                            @for (int i = 0; i < fileNames.Length; i++)
+                            {
                                 @Html.HiddenFor(model => model.ShortLink)
-                                @Html.HiddenFor(model => model.FileUploadId)
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </div>
-                            // Password input
-                            <div class="form-group col-3 pt-2">
-                                <input type="password" class="form-control" id="Password" name="Password" maxLength="12">
-                                @Html.HiddenFor(model => model.Password)
-                                @Html.ValidationMessageFor(model => model.Password)
-                            </div>
+                                @Html.Hidden("fileNames[" + i + "]", fileNames[i])
+                            }
+                            @if (fileNames.Length >= 2)
+                            {
+                                <button type="submit" class="btn btn-light align-content-end">Download All</button>
+                            }
                         }
                     </div>
+                </div>
+                <div class="row">
+                    @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post, new { id = "deleteForm"}))
+                    {
+                        // Delete button
+                        <div class="col-9 pt-2">
+                            @Html.HiddenFor(model => model.ShortLink)
+                            @Html.HiddenFor(model => model.FileUploadId)
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </div>
+                        // Password input
+                        <div class="form-group col-3 pt-2">
+                            <input type="password" class="form-control" id="Password" name="Password" maxLength="12">
+                            @Html.HiddenFor(model => model.Password)
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </div>
+                    }
                 </div>
             </div>
         </div>
     </div>
-</body>
+</div>
+<input type="hidden" id="message" value="@TempData["message"]" />
+
+<script>
+    // Confirmation alert before deleting record
+    document.getElementById('deleteForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: '',
+            text: 'Are you sure you want to delete this upload?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // User confirmed, proceed with form submission
+                this.submit(); // Submit the form
+            }
+        });
+    });
+
+    // Show alert if Tempdata's message is passed due to wrong password
+    function showAlertIfConditionMet() {
+        var message = document.getElementById('message').value;
+        if (message) {
+            Swal.fire({
+                title: '',
+                text: '@TempData["message"]',
+                icon: 'error',
+            });
+        }
+    }
+    showAlertIfConditionMet();
+</script>
