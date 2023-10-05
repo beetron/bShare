@@ -29,7 +29,6 @@ namespace Bshare.Controllers
             if (files.Count == 0)
             {
                 ViewBag.Message = "No file attached";
-                // return View("Upload", ViewBag.Message);
                 return View("Upload");
             }
             

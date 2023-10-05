@@ -3,7 +3,7 @@
 @{
 }
 
-@using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data", id = "create" }))
 {
     @Html.AntiForgeryToken()
     <div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
@@ -77,6 +77,11 @@
                     </div>
                     <div>
                         @Html.ActionLink("Back to List", "Index")
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                            0%
+                        </div>
                     </div>
                 </div>
             </div>

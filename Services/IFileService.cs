@@ -6,5 +6,6 @@ namespace Bshare.Services
     {
         Task<ICollection<FileDetail>> SaveFileAsync(FileUpload fileUpload, List<IFormFile> files, string _localFilePath);
         Task<ICollection<FileDetail>> DeleteFileAsync(FileUpload fileUpload, string _localFilePath);
+        
     }
 }
