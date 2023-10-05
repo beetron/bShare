@@ -3,6 +3,9 @@ using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 using Bshare.Services;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace Bshare.Controllers
 {
@@ -17,7 +20,7 @@ namespace Bshare.Controllers
             _iFilesUploadRepository = iFilesUploadRepository;
             _iFileService = iFileService;
         }
-        
+
         // Create method to create & upload new file
         [HttpPost]
         [ValidateAntiForgeryToken]

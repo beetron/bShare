@@ -3,7 +3,7 @@
 @{
 }
 
-@using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data", id = "create" }))
+@using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data", id = "upload" }))
 {
     @Html.AntiForgeryToken()
     <div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
@@ -71,48 +71,51 @@
                             </div>
                         </div>
                         <div class="form-group pt-3">
-                            <input type="submit" value="Create" class="btn btn-warning"/>
+                            <input type="submit" value="Create" class="btn btn-secondary"/>
                             
                         </div>
                     </div>
                     <div>
                         @Html.ActionLink("Back to List", "Index")
                     </div>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                            0%
-                        </div>
+                    <div id="progressDiv" style="display: none;">
+                        <progress id="progressBar" value="0" max="100"></progress>
+                        <span id="progressText">0%</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <input type="hidden" id="message" value="@ViewBag.Message" />
 }
 
 <script>
-        // Check if any files are selected before controller method Create is called
-        $(document).ready(function () {
-            $("#create").submit(function (e) {
-                var hasFiles = false;
+    // Check if any files are selected before controller method Create is called
+    $(document).ready(function () {
+        $("#upload").submit(function (e) {
+            var hasFiles = false;
 
-                $("input[type='file']").each(function () {
-                    if ($(this).get(0).files.length > 0) {
-                        hasFiles = true;
-                        return false;
-                    }
-                });
-
-                if (!hasFiles) {
+            $("input[type='file']").each(function () {
+                if ($(this).get(0).files.length > 0) {
                     Swal.fire({
-                        title: '',
-                        text: 'No files are selected',
-                        icon: 'error',
+                        title: 'Waiting for upload...',
+                        showConfirmButton: false,
+                        allowOutsideClick: false
                     });
-                    e.preventDefault();
+                    hasFiles = true;
+                    return false;
                 }
             });
+
+            if (!hasFiles) {
+                Swal.fire({
+                    title: '',
+                    text: 'No files are selected',
+                    icon: 'error',
+                });
+                e.preventDefault();
+            }
         });
+    });
 
     // Detect character input and update character count
     function charUpdate() {
