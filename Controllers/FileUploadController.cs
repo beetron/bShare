@@ -26,12 +26,6 @@ namespace Bshare.Controllers
         [Route ("/file/create")]
         public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
         {
-            if (files.Count == 0)
-            {
-                ViewBag.Message = "No file attached";
-                return View("Upload");
-            }
-            
             if (ModelState.IsValid)
             {
                 fileUpload.DateUpload = DateTime.Now;

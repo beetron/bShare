@@ -91,18 +91,28 @@
 }
 
 <script>
-    // Show alert if Creating without any file selected
-    function showAlertIfConditionMet() {
-        var message = document.getElementById('message').value;
-        if (message) {
-            Swal.fire({
-                title: '',
-                text: '@ViewBag.Message',
-                icon: 'error',
+        // Check if any files are selected before controller method Create is called
+        $(document).ready(function () {
+            $("#create").submit(function (e) {
+                var hasFiles = false;
+
+                $("input[type='file']").each(function () {
+                    if ($(this).get(0).files.length > 0) {
+                        hasFiles = true;
+                        return false;
+                    }
+                });
+
+                if (!hasFiles) {
+                    Swal.fire({
+                        title: '',
+                        text: 'No files are selected',
+                        icon: 'error',
+                    });
+                    e.preventDefault();
+                }
             });
-        }
-    }
-    showAlertIfConditionMet();
+        });
 
     // Detect character input and update character count
     function charUpdate() {
