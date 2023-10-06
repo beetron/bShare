@@ -18,7 +18,8 @@
                             new
                             {
                                 @class = "form-control file-description-width",
-                                placeholder = "Option to add file(s) description here"
+                                placeholder = "Option to add file(s) description here",
+                                id = "fileDescription"
                             })
                         @Html.ValidationMessageFor(model => model.FileDescription)
                     </div>
@@ -27,7 +28,6 @@
                     <div class="form-group pt-4">
                         <label for="files" class="control-label"></label>
                         <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails()" />
-
                         <div id="selectedFileDetails" class="pt-4" style="display: none;">
                             <table>
                                 <thead>
@@ -53,7 +53,7 @@
                                         new SelectListItem { Text = "12 Hours", Value = "12" },
                                         new SelectListItem { Text = "24 Hours", Value = "24" },
                                         new SelectListItem { Text = "48 Hours", Value = "48" },
-                                    }, "Value", "Text"), new { @class = "form-control custom-width" })
+                                    }, "Value", "Text"), new { @class = "form-control custom-width", id="dateExpire" })
                             </div>
                             @*Password input*@
                             <div class="col-6">
@@ -70,17 +70,14 @@
                                 <span id="charCountDisplay">0 / 12 characters</span>
                             </div>
                         </div>
-                        <div class="form-group pt-3">
-                            <input type="submit" value="Create" class="btn btn-secondary"/>
-                            
+                        <div class="row">
+                            <div class="col-2 pt-3">
+                                <input type="submit" value="Upload" class="btn btn-secondary"/>
+                            </div>
+                            <div class="col-2 pt-3">
+                                <button type="button" id="resetButton" class="btn btn-secondary">Reset</button>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        @Html.ActionLink("Back to List", "Index")
-                    </div>
-                    <div id="progressDiv" style="display: none;">
-                        <progress id="progressBar" value="0" max="100"></progress>
-                        <span id="progressText">0%</span>
                     </div>
                 </div>
             </div>
@@ -88,7 +85,20 @@
     </div>
 }
 
+
 <script>
+    // Reset; clear form
+    $(document).ready(function () {
+        $("#resetButton").click(function () {
+            $("#fileDescription").val(""); // reset file description
+            $("#files").val(null); // reset file(s)
+            document.getElementById('selectedFileDetails').style.display = 'none' // hide file info
+            $("#charCount").val(""); // reset password
+            $("#dateExpire").val("12"); // reset expiry selection
+            document.getElementById('charCountDisplay').innerHTML = "0 / 12 characters"; //reset char counter
+        });
+    });
+
     // Check if any files are selected before controller method Create is called
     $(document).ready(function () {
         $("#upload").submit(function (e) {

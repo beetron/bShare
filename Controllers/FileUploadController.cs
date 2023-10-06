@@ -3,9 +3,6 @@ using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 using Bshare.Services;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace Bshare.Controllers
 {
@@ -75,11 +72,6 @@ namespace Bshare.Controllers
 
         public IActionResult Upload()
         {
-            // FileUpload fileUpload = new FileUpload
-            // {
-            //     Password = ""
-            // };
-            // return View("Upload", fileUpload);
             return View("Upload");
         }
 
