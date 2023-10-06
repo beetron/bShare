@@ -6,8 +6,6 @@
     <div class="row">
         <div class="col">
             <div class="custom-container bg-dark text-light justify-content-center">
-                <h2 class="text-center mb-4">File Upload Details</h2>
-                <hr />
                 <div class="row">
                     <div class="row">
                         <div class="col-3">
@@ -17,6 +15,7 @@
                             <p>@Model.FileDescription</p>
                         </div>
                     </div>
+                    <hr />
                     <div class="row">
                         <div class="col-3">
                             <h5>Short Link:</h5>
@@ -25,6 +24,7 @@
                             <p>@Model.ShortLink</p>
                         </div>
                     </div>
+                    <hr />
                     <div class="row">
                         <div class="col-3">
                             <h5>Expires:</h5>
@@ -33,8 +33,11 @@
                             <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
                         </div>
                     </div>
-                        @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
-                    
+                    <hr />
+                    <div class="p-2 col-12 text-center">
+                        <img src="data:image/bmp;base64,@Convert.ToBase64String(Model.QrImage)" style="width: 150px; height: auto;" alt="QR Code" />
+                    </div>
+                    <hr />
                 </div>
                 <div class="row justify-content-start">
                     <div class="col">

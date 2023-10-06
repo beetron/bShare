@@ -63,8 +63,9 @@
                                     {
                                         @class = "form-control custom-width",
                                         maxLength = 12,
-                                        onkeyup="charUpdate()",
-                                        id="charCount"
+                                        onkeyup = "charUpdate()",
+                                        id = "charCount",
+                                        type = "password"
                                     })
                                 @Html.ValidationMessageFor(model => model.Password)
                                 <span id="charCountDisplay">0 / 12 characters</span>

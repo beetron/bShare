@@ -1,8 +1,11 @@
-﻿using Bshare.Models;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
+using Bshare.Models;
 using Bshare.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 using Bshare.Services;
+using QRCoder;
 
 namespace Bshare.Controllers
 {
@@ -11,6 +14,7 @@ namespace Bshare.Controllers
         readonly IFilesUploadRepository _iFilesUploadRepository;
         readonly IFileService _iFileService;
         string _localFilePath = Environment.GetEnvironmentVariable("bshare_UploadLocation");
+        string _bshareLink = Environment.GetEnvironmentVariable("bshare_AppUrl");
 
         public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IFileService iFileService)
         {
@@ -50,6 +54,23 @@ namespace Bshare.Controllers
                 // Generate short link and check database if unique (6 characters specified)
                 fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLinkAsync(6);
 
+                // Generate QrCode
+                string qrPayload = _bshareLink + fileUpload.ShortLink;
+                QRCodeGenerator qrCodeGenerator = new();
+                QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(qrPayload, QRCodeGenerator.ECCLevel.Q);
+                QRCode qrCode = new QRCode(qrCodeData);
+                Bitmap qrCodeImage = qrCode.GetGraphic(20);
+
+                byte[] qrImageBytes;
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    qrCodeImage.Save(ms, ImageFormat.Bmp);
+                    qrImageBytes = ms.ToArray();
+                }
+
+                fileUpload.QrImage = qrImageBytes;
+
                 // Create new directory and save files to local storage
                 fileUpload.FileDetails = await _iFileService.SaveFileAsync(fileUpload, files, _localFilePath);
 
@@ -84,6 +105,7 @@ namespace Bshare.Controllers
             if (shortLinkExists)
             {
                 FileUpload fileRecord = await _iFilesUploadRepository.GetByShortLinkAsync(shortLink);
+                fileRecord.ShortLink = _bshareLink + fileRecord.ShortLink;
 
                 return View(fileRecord);
             }
