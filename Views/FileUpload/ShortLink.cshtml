@@ -1,39 +1,40 @@
-﻿@using Microsoft.AspNetCore.Hosting.StaticWebAssets
-@model FileUpload
+﻿@model FileUpload
 @{
 }
 
-@*<head>
-    <style>
-        .custom-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-</head>*@
-
-<div class="container mt-5 col-12 col-lg-6 col-xl-6 col-xxl-6">
+<div class="container mt-5 col-12 col-lg-8 col-xl-6 col-xxl-6">
     <div class="row">
         <div class="col">
             <div class="custom-container bg-dark text-light justify-content-center">
                 <h2 class="text-center mb-4">File Upload Details</h2>
                 <hr />
                 <div class="row">
-                    <div class="col">
-                        <h4>File Description:</h4>
-                        <p>@Model.FileDescription</p>
-
-                        <h4>Short Link:</h4>
-                        <p>@Model.ShortLink</p>
-
-                        <h4>Expires on:</h4>
-                        <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
-
-                        <h4>Qr Image:</h4>
-                        @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
+                    <div class="row">
+                        <div class="col-3">
+                            <h5>Description:</h5>
+                        </div>
+                        <div class="col-3">
+                            <p>@Model.FileDescription</p>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h5>Short Link:</h5>
+                        </div>
+                        <div class="col-3">
+                            <p>@Model.ShortLink</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h5>Expires:</h5>
+                        </div>
+                        <div class="col-4">
+                            <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
+                        </div>
+                    </div>
+                        @*<img src="data:image/png;base64,@Convert.ToBase64String(Model.QrImage)" alt="QR Code" />*@
+                    
                 </div>
                 <div class="row justify-content-start">
                     <div class="col">
@@ -42,7 +43,7 @@
                             <tr>
                                 <th></th>
                                 <th>File Name</th>
-                                <th>Size</th>
+                                <th>Size(MB)</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -56,11 +57,12 @@
                                     <tr>
                                         <td>#@fileCount</td>
                                         <td>@fileDetail.FileName</td>
-                                        <td>@fileDetail.FileSize.ToString("0.00") MB</td>
+                                        <td>@fileDetail.FileSize.ToString("0.00")</td>
                                         <td>
                                             @Html.Hidden("fileName", @fileDetail.FileName)
                                             @Html.HiddenFor(model => model.ShortLink)
-                                            <button type="submit" class="btn btn-light">Download</button>
+                                            <button type="submit" class="btn btn-light" 
+                                                    style="padding: 1;"><i class="far fa-circle-down fa-lg"></i></button>
                                         </td>
                                     </tr>
                                 }
