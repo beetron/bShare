@@ -139,7 +139,6 @@ namespace Bshare.Controllers
 
             string fileLocation = Path.Combine(_localFilePath + fileUpload.ShortLink);
             string fileNameZip = fileUpload.ShortLink + ".zip";
-            string fileNameSingle = "/" + fileName;
 
             // Multiple file download as Zip
             if (fileNames.Length >= 2)
@@ -174,12 +173,21 @@ namespace Bshare.Controllers
             {
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    using (FileStream fileStream = new FileStream(fileLocation + fileNameSingle, FileMode.Open))
+                    using (FileStream fileStream = new FileStream(fileLocation + "/" + fileName, FileMode.Open))
                     {
                         fileStream.CopyTo(memoryStream);
                     }
 
-                    return File(memoryStream.ToArray(), "image/*", fileNameSingle);
+                    // Use a FileResult with a specified content disposition header
+                    // var contentDisposition = new System.Net.Mime.ContentDisposition
+                    // {
+                    //     FileName = fileNameSingle,
+                    //     Inline = false,  // Set to true if you want the browser to attempt to display the file inline
+                    // };
+                    // Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+                    // return File(memoryStream.ToArray(), "image/*");
+
+                    return File(memoryStream.ToArray(), "image/*", fileName);
                 }
             }
             return Ok();
