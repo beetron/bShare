@@ -85,7 +85,6 @@
     </div>
 }
 
-
 <script>
     // Reset; clear form
     $(document).ready(function () {
@@ -99,30 +98,44 @@
         });
     });
 
-    // Check if any files are selected before controller method Create is called
+    // Check if total selected file size is less than 500MB before form submission
     $(document).ready(function () {
         $("#upload").submit(function (e) {
-            var hasFiles = false;
+            var totalSize = 0; // Total size of selected files in bytes
 
+            // Iterate through each file input
             $("input[type='file']").each(function () {
-                if ($(this).get(0).files.length > 0) {
-                    Swal.fire({
-                        title: 'Waiting for upload...',
-                        showConfirmButton: false,
-                        allowOutsideClick: false
-                    });
-                    hasFiles = true;
-                    return false;
+                var files = $(this).get(0).files;
+
+                for (var i = 0; i < files.length; i++) {
+                    totalSize += files[i].size; // Add the size of each selected file
                 }
             });
 
-            if (!hasFiles) {
+            // Convert total size to MB
+            var totalSizeInMB = totalSize / (1024 * 1024);
+
+            // Limit file size
+            if (totalSizeInMB > 500) {
+                Swal.fire({
+                    title: '',
+                    text: 'Total file size must be less than 500MB',
+                    icon: 'error',
+                });
+                e.preventDefault(); // Prevent form submission
+            } else if (totalSizeInMB <= 0) {
                 Swal.fire({
                     title: '',
                     text: 'No files are selected',
                     icon: 'error',
                 });
-                e.preventDefault();
+                e.preventDefault(); // Prevent form submission
+            } else {
+                Swal.fire({
+                    title: 'Waiting for upload...',
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
             }
         });
     });
