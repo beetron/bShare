@@ -90,7 +90,6 @@ namespace Bshare.Repository
             {
                 return false;
             }
-
         }
 
         // Short link generator with database check if link is unique

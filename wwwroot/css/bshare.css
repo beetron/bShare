@@ -1,0 +1,18 @@
+﻿.custom-background-color {
+    background-color: rgba(0, 51, 102);
+}
+
+.custom-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-width {
+    width: 150px;
+}
+
+.file-description-width {
+    width: 400px;
+}

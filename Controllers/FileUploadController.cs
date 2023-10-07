@@ -13,8 +13,8 @@ namespace Bshare.Controllers
     {
         readonly IFilesUploadRepository _iFilesUploadRepository;
         readonly IFileService _iFileService;
-        string _localFilePath = Environment.GetEnvironmentVariable("bshare_UploadLocation");
-        string _bshareLink = Environment.GetEnvironmentVariable("bshare_AppUrl");
+        string? _localFilePath = Environment.GetEnvironmentVariable("bshare_UploadLocation");
+        string? _bshareLink = Environment.GetEnvironmentVariable("bshare_AppUrl");
 
         public FileUploadController(IFilesUploadRepository iFilesUploadRepository, IFileService iFileService)
         {
@@ -46,9 +46,9 @@ namespace Bshare.Controllers
                     case "48":
                         fileUpload.DateExpire = DateTime.Now.AddHours(48);
                         break;
-
-                    //default:
-                    //    break;
+                    default:
+                        fileUpload.DateExpire = DateTime.Now.AddHours(12);
+                        break;
                 }
 
                 // Generate short link and check database if unique (6 characters specified)

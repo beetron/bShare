@@ -1,7 +1,4 @@
 ﻿using Bshare.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.CodeAnalysis.Elfie.PDB;
-using System.IO;
 
 namespace Bshare.Services
 {

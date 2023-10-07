@@ -2,7 +2,7 @@
 @model FileUpload
 @{
 }
-
+<body class="custom-background-color">
 @using (Html.BeginForm("Create", "FileUpload", FormMethod.Post, new { enctype = "multipart/form-data", id = "upload" }))
 {
     @Html.AntiForgeryToken()
@@ -87,6 +87,7 @@
         </div>
     </div>
 }
+</body>
 
 <script>
     // Reset; clear form
