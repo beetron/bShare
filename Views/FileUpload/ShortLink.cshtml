@@ -11,23 +11,24 @@
                         <div class="col-3">
                             <h5>Description:</h5>
                         </div>
-                        <div class="col-3">
-                            <p>@Model.FileDescription</p>
+                        <div class="col-9">
+                            <p style="width: 100%;">@Model.FileDescription</p>
                         </div>
                     </div>
                     <hr />
                     <div class="row">
                         <div class="col-3">
-                            <h5>Short Link:</h5>
+                            <h5>Click link to copy: </h5>
                         </div>
-                        <div class="col-3">
-                            <p>@Model.ShortLink</p>
+                        <div class="col-9">
+                            <input type="text" id="shortLink" readonly value="@Model.ShortLink" onclick="copyToClipboard()"
+                                   style="border: none; background-color: transparent; color: white; width: 100%;">
                         </div>
                     </div>
                     <hr />
                     <div class="row">
                         <div class="col-3">
-                            <h5>Expires:</h5>
+                            <h5>Expires on:</h5>
                         </div>
                         <div class="col-4">
                             <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
@@ -103,7 +104,7 @@
                         </div>
                         // Password input
                         <div class="form-group col-3 pt-2">
-                            <input type="password" class="form-control" id="Password" name="Password" maxLength="12">
+                            <input type="password" class="form-control" id="Password" name="Password" maxLength="12" placeholder="Password">
                             @Html.HiddenFor(model => model.Password)
                             @Html.ValidationMessageFor(model => model.Password)
                         </div>
@@ -116,6 +117,14 @@
 <input type="hidden" id="message" value="@TempData["message"]" />
 
 <script>
+    // Click to copy short link
+    function copyToClipboard() {
+        var textBox = document.getElementById("shortLink");
+        textBox.select();
+        document.execCommand("copy");
+        alert("Link Copied! \n" + textBox.value);
+    }
+
     // Confirmation alert before deleting record
     document.getElementById('deleteForm').addEventListener('submit', function (e) {
         e.preventDefault();
