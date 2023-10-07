@@ -79,16 +79,11 @@ namespace Bshare.Controllers
 
                 //return RedirectToAction(nameof(fileUpload.ShortLink));
                 //return RedirectToAction("", "", new { id = fileUpload.ShortLink });
-                return Redirect($"/{fileUpload.ShortLink}");
+                return Redirect($"~/{fileUpload.ShortLink}");
                 //return View("Upload");
             }
             // return View("Upload");
             return View("Upload");
-        }
-
-        public IActionResult Index()
-        {
-            return View();
         }
 
         public IActionResult Upload()
@@ -96,9 +91,8 @@ namespace Bshare.Controllers
             return View("Upload");
         }
 
-
         // Redirects to short link URL if the short link exists in database
-        [Route("/{shortLink}")]
+        [Route("~/{shortLink}")]
         public async Task<IActionResult> ShortLink(string shortLink)
         {
             bool shortLinkExists = await _iFilesUploadRepository.CheckShortLinkAsync(shortLink);
@@ -208,11 +202,13 @@ namespace Bshare.Controllers
                 // Delete file upload record from database
                 await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);
 
-                return Redirect("/");
+                return Redirect("~/");
+                // return View("Upload");
             }
 
             TempData["message"] = "Wrong password";
-            return Redirect($"/{fileUpload.ShortLink}");
+            // return Redirect($"/{fileUpload.ShortLink}");
+            return Redirect($"~/{fileUpload.ShortLink}");
         }
     }
 }
