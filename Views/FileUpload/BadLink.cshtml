@@ -1,18 +1,40 @@
 ﻿@model dynamic
-
 @{
-    Layout = null;
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      Bad ShortLink
+<body class="custom-background-color">
+<div class="container mt-5 col-10 col-lg-8 col-xl-6 col-xxl-6">
+    <div class="row">
+        <div class="col">
+            <div class="custom-container bg-dark text-light justify-content-center">
+                <div class="col-12 text-center">
+                    <p>
+                        Oops?  You are visiting a bad link.<br/>
+                        Re-directing in <span id="countdown">6</span> seconds...
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-</html>
+
+<script>
+    // Re-direct to index after X seconds
+    function updateCountdown() {
+        var countdownElement = document.getElementById("countdown");
+        var seconds = parseInt(countdownElement.innerText);
+        if (seconds === 1) {
+            window.location.href = '@Url.Action("Upload", "FileUpload")'; // Redirect when countdown reaches 1 second
+        } else {
+            seconds--;
+            countdownElement.innerText = seconds;
+            setTimeout(updateCountdown, 1000); // Update countdown every 1 second
+        }
+    }
+
+    // Start the countdown when the page is loaded
+    document.addEventListener("DOMContentLoaded", function () {
+        // Initial delay before starting the countdown
+        setTimeout(updateCountdown, 1000);
+    });
+</script>
