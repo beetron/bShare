@@ -10,10 +10,23 @@
         <div class="row">
             <div class="col">
                 <div class="custom-container bg-dark text-light">
+                    <div class="row col-12">
+                        bShare is a temporary file upload and share web app.<br/>
+                        Details and code found at the Github link from the icon on top.<br/><br/>
+                        <hr/>
+                        <ul class="ps-4">
+                            <li>500MB limit per upload.</li>
+                            <li>File expire settings of 12, 24, and 48 hours.</li>
+                            <li>QR Image generation.</li>
+                            <li>(Optional) Password for file deletion before expire date.</li>
+                            <li>(Optional) File Description text.</li>
+                        </ul>
+                        <hr/>
+                    </div>
                     @*File description input*@
                     <div class="form-group pt-2">
                         <p>File Description</p>
-                        @Html.TextBoxFor(model => model.FileDescription, 
+                        @Html.TextBoxFor(model => model.FileDescription,
                             new
                             {
                                 @class = "form-control file-description-width",
@@ -27,7 +40,7 @@
                     @*File selection*@
                     <div class="form-group pt-4">
                         <label for="files" class="control-label"></label>
-                        <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails()" />
+                        <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails()"/>
                         <div id="selectedFileDetails" class="pt-4" style="display: none;">
                             <table>
                                 <thead>
@@ -41,7 +54,7 @@
                             </table>
                         </div>
                     </div>
-                    
+
                     <div class="form-group pt-5">
                         <div class="row">
                             @*DateExpire selection*@
@@ -53,13 +66,13 @@
                                         new SelectListItem { Text = "12 Hours", Value = "12" },
                                         new SelectListItem { Text = "24 Hours", Value = "24" },
                                         new SelectListItem { Text = "48 Hours", Value = "48" },
-                                    }, "Value", "Text"), 
-                                    new { @class = "form-control custom-width", id="dateExpire", style="width: 50%;" })
+                                    }, "Value", "Text"),
+                                    new { @class = "form-control custom-width", id = "dateExpire", style = "width: 50%;" })
                             </div>
                             @*Password input*@
                             <div class="col-6">
                                 <p>Password (optional)</p>
-                                @Html.TextBoxFor(model => model.Password, 
+                                @Html.TextBoxFor(model => model.Password,
                                     new
                                     {
                                         @class = "form-control custom-width",
