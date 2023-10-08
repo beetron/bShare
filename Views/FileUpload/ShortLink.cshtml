@@ -9,20 +9,16 @@
             <div class="custom-container bg-dark text-light justify-content-center">
                 <div class="row">
                     <div class="row">
-                        <div class="col-3">
-                            <h5>Description:</h5>
-                        </div>
-                        <div class="col-9">
+                        <div class="col-12">
+                                <h5>File Description:</h5>
                             <p style="width: 100%;">@Model.FileDescription</p>
                         </div>
                     </div>
                     <hr />
                     <div class="row">
-                        <div class="col-3">
-                            <h5>Click link to copy: </h5>
-                        </div>
-                        <div class="col-9">
-                            <input type="text" id="shortLink" readonly value="@Model.ShortLink" onclick="copyToClipboard()"
+                        <div class="col-12">
+                                <h5>Click link to copy: </h5>
+                            <input type="text" id="shortLink" class="p-2" readonly value="@Model.ShortLink" onclick="copyToClipboard()"
                                    style="border: none; background-color: transparent; color: white; width: 100%;">
                         </div>
                     </div>
@@ -66,8 +62,7 @@
                                         <td>
                                             @Html.Hidden("fileName", @fileDetail.FileName)
                                             @Html.HiddenFor(model => model.ShortLink)
-                                            <button type="submit" class="btn btn-light" 
-                                                    style="padding: 1;"><i class="far fa-circle-down fa-lg"></i></button>
+                                            <button type="submit" class="btn btn-light"><i class="far fa-circle-down fa-lg"></i></button>
                                         </td>
                                     </tr>
                                 }
@@ -98,13 +93,13 @@
                     @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post, new { id = "deleteForm"}))
                     {
                         // Delete button
-                        <div class="col-9 pt-2">
+                        <div class="col-8 pt-2">
                             @Html.HiddenFor(model => model.ShortLink)
                             @Html.HiddenFor(model => model.FileUploadId)
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </div>
                         // Password input
-                        <div class="form-group col-3 pt-2">
+                        <div class="form-group col-4 pt-2">
                             <input type="password" class="form-control" id="Password" name="Password" maxLength="12" placeholder="Password">
                             @Html.HiddenFor(model => model.Password)
                             @Html.ValidationMessageFor(model => model.Password)
