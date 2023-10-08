@@ -30,7 +30,7 @@
                             new
                             {
                                 @class = "form-control file-description-width",
-                                placeholder = "Option to add file(s) description here",
+                                placeholder = "description here",
                                 id = "fileDescription",
                                 style = "width: 80%;"
                             })
@@ -40,7 +40,7 @@
                     @*File selection*@
                     <div class="form-group pt-4">
                         <label for="files" class="control-label"></label>
-                        <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails()"/>
+                            <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails(); handleFileInputChange();" />
                         <div id="selectedFileDetails" class="pt-4" style="display: none;">
                             <table>
                                 <thead>
@@ -67,7 +67,7 @@
                                         new SelectListItem { Text = "24 Hours", Value = "24" },
                                         new SelectListItem { Text = "48 Hours", Value = "48" },
                                     }, "Value", "Text"),
-                                    new { @class = "form-control custom-width", id = "dateExpire", style = "width: 50%;" })
+                                    new { @class = "form-control custom-width", id = "dateExpire", style = "width: 60%;" })
                             </div>
                             @*Password input*@
                             <div class="col-6">
@@ -86,11 +86,11 @@
                                 <span id="charCountDisplay">0 / 12 characters</span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-2 pt-3">
+                        <div class="row justify-content-center">
+                            <div class="col-3 pt-3 text-end">
                                 <input type="submit" value="Upload" class="btn btn-secondary"/>
                             </div>
-                            <div class="col-2 pt-3">
+                            <div class="col-3 pt-3 text-start">
                                 <button type="button" id="resetButton" class="btn btn-secondary">Reset</button>
                             </div>
                         </div>
@@ -112,8 +112,23 @@
             $("#charCount").val(""); // reset password
             $("#dateExpire").val("12"); // reset expiry selection
             document.getElementById('charCountDisplay').innerHTML = "0 / 12 characters"; //reset char counter
+            var fileInput = document.getElementById('files'); // enable file input
+            fileInput.disabled = false;
         });
     });
+
+    // Disable file selection if already selected
+    function handleFileInputChange() {
+        var fileInput = document.getElementById('files');
+
+        if (fileInput.files.length > 0) {
+            // Files are selected, disable the input
+            fileInput.disabled = true;
+        } else {
+            // No files selected, enable the input
+            fileInput.disabled = false;
+        }
+    }
 
     // Check if total selected file size is less than 500MB before form submission
     $(document).ready(function () {
