@@ -28,34 +28,32 @@ namespace Bshare.Controllers
         [RequestSizeLimit(510 * 1024 * 1024)] // Total 510mb
         [RequestFormLimits(MultipartBodyLengthLimit = 505 * 1024 * 1024)] // Form data 505mb
         [Route ("/file/create")]
-        public async Task <IActionResult> Create(FileUpload fileUpload, string dropdownSelection, List<IFormFile> files)
+        public async Task <IActionResult> Create(UploadViewModel uploadViewModel, string dropdownSelection, List<IFormFile> files)
         {
-            if (ModelState.IsValid)
-            {
-                fileUpload.DateUpload = DateTime.Now;
+                uploadViewModel.DateUpload = DateTime.Now;
 
                 // Set DateExpired from dropdown selection
                 switch (dropdownSelection)
                 {
                     case "12":
-                        fileUpload.DateExpire = DateTime.Now.AddHours(12);
+                        uploadViewModel.DateExpire = DateTime.Now.AddHours(12);
                         break;
                     case "24":
-                        fileUpload.DateExpire = DateTime.Now.AddHours(24);
+                        uploadViewModel.DateExpire = DateTime.Now.AddHours(24);
                         break;
                     case "48":
-                        fileUpload.DateExpire = DateTime.Now.AddHours(48);
+                        uploadViewModel.DateExpire = DateTime.Now.AddHours(48);
                         break;
                     default:
-                        fileUpload.DateExpire = DateTime.Now.AddHours(12);
+                        uploadViewModel.DateExpire = DateTime.Now.AddHours(12);
                         break;
                 }
 
                 // Generate short link and check database if unique (6 characters specified)
-                fileUpload.ShortLink = await _iFilesUploadRepository.GenerateShortLinkAsync(6);
+                uploadViewModel.ShortLink = await _iFilesUploadRepository.GenerateShortLinkAsync(6);
 
                 // Generate QrCode
-                string qrPayload = _bshareLink + fileUpload.ShortLink;
+                string qrPayload = _bshareLink + uploadViewModel.ShortLink;
                 QRCodeGenerator qrCodeGenerator = new();
                 QRCodeData qrCodeData = qrCodeGenerator.CreateQrCode(qrPayload, QRCodeGenerator.ECCLevel.Q);
                 QRCode qrCode = new QRCode(qrCodeData);
@@ -69,20 +67,32 @@ namespace Bshare.Controllers
                     qrImageBytes = ms.ToArray();
                 }
 
-                fileUpload.QrImage = qrImageBytes;
+                uploadViewModel.QrImage = qrImageBytes;
 
                 // Create new directory and save files to local storage
-                fileUpload.FileDetails = await _iFileService.SaveFileAsync(fileUpload, files, _localFilePath);
+                uploadViewModel.FileDetails = await _iFileService.SaveFileAsync(uploadViewModel, files, _localFilePath);
+                if (ModelState.IsValid)
+                {
+                    FileUpload fileUpload = new FileUpload
+                    {
+                        FileDescription = uploadViewModel.FileDescription,
+                        Password = uploadViewModel.Password,
+                        ShortLink = uploadViewModel.ShortLink,
+                        QrImage = uploadViewModel.QrImage,
+                        DateUpload = uploadViewModel.DateUpload,
+                        DateExpire = uploadViewModel.DateExpire,
+                        FileDetails = uploadViewModel.FileDetails
+                    };
 
-                // Save database tables
-                await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
+                    // Save database tables
+                    await _iFilesUploadRepository.CreateFileUploadAsync(fileUpload);
 
-                //return RedirectToAction(nameof(fileUpload.ShortLink));
-                //return RedirectToAction("", "", new { id = fileUpload.ShortLink });
-                return Redirect($"~/{fileUpload.ShortLink}");
-                //return View("Upload");
-            }
-            // return View("Upload");
+                    //return RedirectToAction(nameof(fileUpload.ShortLink));
+                    //return RedirectToAction("", "", new { id = fileUpload.ShortLink });
+                    return Redirect($"~/{fileUpload.ShortLink}");
+                    //return View("Upload");
+                }
+                // return View("Upload");
             return View("Upload");
         }
 
@@ -191,13 +201,20 @@ namespace Bshare.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("/file/Delete")]
-        public async Task<IActionResult> DeleteUpload(FileUpload fileUpload)
+        public async Task<IActionResult> DeleteUpload(DeleteViewModel deleteViewModel)
         {
+            FileUpload fileUpload = new FileUpload
+            {
+                FileUploadId = deleteViewModel.FileUploadId,
+                ShortLink = deleteViewModel.ShortLink,
+                Password = deleteViewModel.Password
+            };
+
             // Check if password is correct
             if (await _iFilesUploadRepository.CheckPasswordAsync(fileUpload, fileUpload.Password))
             {
                 // Delete physical files on server
-                await _iFileService.DeleteFileAsync(fileUpload, _localFilePath);
+                await _iFileService.DeleteFileAsync(deleteViewModel, _localFilePath);
 
                 // Delete file upload record from database
                 await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);

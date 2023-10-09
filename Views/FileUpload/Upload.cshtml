@@ -1,5 +1,5 @@
 ﻿﻿@using System.Security.Cryptography.X509Certificates
-@model FileUpload
+@model UploadViewModel
 @{
 }
 <body class="custom-background-color">
@@ -123,7 +123,7 @@
 
         if (fileInput.files.length > 0) {
             // Files are selected, disable the input
-            fileInput.disabled = true;
+            fileInput.readOnly= true;
         } else {
             // No files selected, enable the input
             fileInput.disabled = false;

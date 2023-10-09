@@ -5,9 +5,9 @@ namespace Bshare.Services
     public class FileService : IFileService
     {
         // Save physical file on server
-        public async Task<ICollection<FileDetail>> SaveFileAsync(FileUpload fileUpload, List<IFormFile> files, string _localFilePath)
+        public async Task<ICollection<FileDetail>> SaveFileAsync(UploadViewModel uploadViewModel, List<IFormFile> files, string _localFilePath)
         {
-            string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
+            string directoryPath = Path.Combine(_localFilePath, uploadViewModel.ShortLink);
 
             // Create file directory if it doesn't exist
             if (!Directory.Exists(directoryPath))
@@ -27,9 +27,9 @@ namespace Bshare.Services
                         double fileSizeKb = fileSizeBytes / 1024;
                         double fileSizeMb = fileSizeKb / 1024;
 
-                        string filePath = Path.Combine(_localFilePath, fileUpload.ShortLink, file.FileName);
+                        string filePath = Path.Combine(_localFilePath, uploadViewModel.ShortLink, file.FileName);
 
-                        fileUpload.FileDetails.Add(new FileDetail
+                        uploadViewModel.FileDetails.Add(new FileDetail
                         {
                             FileName = file.FileName,
                             FileSize = fileSizeMb,
@@ -43,7 +43,7 @@ namespace Bshare.Services
                     }
                 }
 
-                return fileUpload.FileDetails;
+                return uploadViewModel.FileDetails;
             }
             catch (Exception ex)
             {
@@ -52,9 +52,9 @@ namespace Bshare.Services
         }
 
         // Delete physical file from server
-        public async Task<ICollection<FileDetail>> DeleteFileAsync(FileUpload fileUpload, string _localFilePath)
+        public async Task<ICollection<FileDetail>> DeleteFileAsync(DeleteViewModel deleteViewModel, string _localFilePath)
         {
-            string directoryPath = Path.Combine(_localFilePath, fileUpload.ShortLink);
+            string directoryPath = Path.Combine(_localFilePath, deleteViewModel.ShortLink);
 
             if (Directory.Exists(directoryPath))
             {
