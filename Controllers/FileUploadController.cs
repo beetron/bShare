@@ -110,8 +110,17 @@ namespace Bshare.Controllers
             {
                 FileUpload fileRecord = await _iFilesUploadRepository.GetByShortLinkAsync(shortLink);
                 fileRecord.ShortLink = _bshareLink + fileRecord.ShortLink;
-
-                return View(fileRecord);
+                ShortLinkViewModel shortLinkViewModel = new ShortLinkViewModel
+                {
+                    FileDescription = fileRecord.FileDescription,
+                    Password = fileRecord.Password,
+                    ShortLink = fileRecord.ShortLink,
+                    QrImage = fileRecord.QrImage,
+                    DateExpire = fileRecord.DateExpire,
+                    FileDetails = fileRecord.FileDetails
+                };
+                return View(shortLinkViewModel);
+                // return View(fileRecord);
             }
             else
             {
@@ -126,7 +135,7 @@ namespace Bshare.Controllers
 
         // Download single file, or multiple as Zip
         [Route("/file/Download")]
-        public IActionResult DownloadFile(FileUpload fileUpload, string[] fileNames, string fileName)
+        public IActionResult DownloadFile(ShortLinkViewModel shortLinkViewModel, string[] fileNames, string fileName)
         {
             if (!ModelState.IsValid)
             {
@@ -141,8 +150,8 @@ namespace Bshare.Controllers
                 // Example: return View("ErrorViewName");
             }
 
-            string fileLocation = Path.Combine(_localFilePath + fileUpload.ShortLink);
-            string fileNameZip = fileUpload.ShortLink + ".zip";
+            string fileLocation = Path.Combine(_localFilePath + shortLinkViewModel.ShortLink);
+            string fileNameZip = shortLinkViewModel.ShortLink + ".zip";
 
             // Multiple file download as Zip
             if (fileNames.Length >= 2)
