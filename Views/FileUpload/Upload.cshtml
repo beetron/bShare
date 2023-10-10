@@ -40,7 +40,9 @@
                     @*File selection*@
                     <div class="form-group pt-4">
                         <label for="files" class="control-label"></label>
+                        <div id="fileInputContainer">
                             <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails(); handleFileInputChange();" />
+                        </div>
                         <div id="selectedFileDetails" class="pt-4" style="display: none;">
                             <table>
                                 <thead>
@@ -112,21 +114,22 @@
             $("#charCount").val(""); // reset password
             $("#dateExpire").val("12"); // reset expiry selection
             document.getElementById('charCountDisplay').innerHTML = "0 / 12 characters"; //reset char counter
-            var fileInput = document.getElementById('files'); // enable file input
-            fileInput.disabled = false;
+            var fileInput = document.getElementById('fileInputContainer'); // enable file input
+            fileInput.style.pointerEvents = 'auto';
         });
     });
 
     // Disable file selection if already selected
     function handleFileInputChange() {
+        var fileInputContainer = document.getElementById('fileInputContainer');
         var fileInput = document.getElementById('files');
 
         if (fileInput.files.length > 0) {
-            // Files are selected, disable the input
-            fileInput.readOnly= true;
+            // Files are selected, disable the container
+            fileInputContainer.style.pointerEvents = 'none';
         } else {
-            // No files selected, enable the input
-            fileInput.disabled = false;
+            // No files selected, enable the container
+            fileInputContainer.style.pointerEvents = 'auto';
         }
     }
 
