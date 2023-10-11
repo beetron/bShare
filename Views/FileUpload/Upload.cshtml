@@ -103,48 +103,6 @@
 </body>
 
 <script>
-    // Function to display the selected file details
-    function displaySelectedFileDetails() {
-        var fileListBody = document.getElementById('fileListBody');
-
-        // Clear the existing table body
-        fileListBody.innerHTML = '';
-
-        // Check if more than one file is selected
-        if (selectedFiles.length > 0) {
-            // Show the selectedFileDetails div
-            document.getElementById('selectedFileDetails').style.display = 'block';
-
-            // Loop through the selected files and display file name and file size
-            for (var i = 0; i < selectedFiles.length; i++) {
-                var file = selectedFiles[i];
-                var fileName = file.name;
-                var fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
-
-                // Create a new table row (tr)
-                var row = document.createElement('tr');
-
-                // Create table data cells (td) for file name and file size
-                var fileNameCell = document.createElement('td');
-                var fileSizeCell = document.createElement('td');
-
-                // Set the text content of the cells
-                fileNameCell.textContent = fileName;
-                fileSizeCell.textContent = fileSize;
-
-                // Append the cells to the row
-                row.appendChild(fileNameCell);
-                row.appendChild(fileSizeCell);
-
-                // Append the row to the table body
-                fileListBody.appendChild(row);
-            }
-        } else {
-            // Hide the selectedFileDetails div when no files are selected
-            document.getElementById('selectedFileDetails').style display = 'none';
-        }
-    }
-
     // Reset; clear form
     $(document).ready(function () {
         $("#resetButton").click(function () {
