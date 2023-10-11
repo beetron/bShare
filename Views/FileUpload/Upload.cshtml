@@ -40,9 +40,7 @@
                     @*File selection*@
                     <div class="form-group pt-4">
                         <label for="files" class="control-label"></label>
-                        <div id="fileInputContainer">
-                            <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails(); handleFileInputChange();" />
-                        </div>
+                        <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();" />
                         <div id="selectedFileDetails" class="pt-4" style="display: none;">
                             <table>
                                 <thead>
@@ -105,6 +103,48 @@
 </body>
 
 <script>
+    // Function to display the selected file details
+    function displaySelectedFileDetails() {
+        var fileListBody = document.getElementById('fileListBody');
+
+        // Clear the existing table body
+        fileListBody.innerHTML = '';
+
+        // Check if more than one file is selected
+        if (selectedFiles.length > 0) {
+            // Show the selectedFileDetails div
+            document.getElementById('selectedFileDetails').style.display = 'block';
+
+            // Loop through the selected files and display file name and file size
+            for (var i = 0; i < selectedFiles.length; i++) {
+                var file = selectedFiles[i];
+                var fileName = file.name;
+                var fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
+
+                // Create a new table row (tr)
+                var row = document.createElement('tr');
+
+                // Create table data cells (td) for file name and file size
+                var fileNameCell = document.createElement('td');
+                var fileSizeCell = document.createElement('td');
+
+                // Set the text content of the cells
+                fileNameCell.textContent = fileName;
+                fileSizeCell.textContent = fileSize;
+
+                // Append the cells to the row
+                row.appendChild(fileNameCell);
+                row.appendChild(fileSizeCell);
+
+                // Append the row to the table body
+                fileListBody.appendChild(row);
+            }
+        } else {
+            // Hide the selectedFileDetails div when no files are selected
+            document.getElementById('selectedFileDetails').style display = 'none';
+        }
+    }
+
     // Reset; clear form
     $(document).ready(function () {
         $("#resetButton").click(function () {
@@ -115,23 +155,8 @@
             $("#dateExpire").val("12"); // reset expiry selection
             document.getElementById('charCountDisplay').innerHTML = "0 / 12 characters"; //reset char counter
             var fileInput = document.getElementById('fileInputContainer'); // enable file input
-            fileInput.style.pointerEvents = 'auto';
         });
     });
-
-    // Disable file selection if already selected
-    function handleFileInputChange() {
-        var fileInputContainer = document.getElementById('fileInputContainer');
-        var fileInput = document.getElementById('files');
-
-        if (fileInput.files.length > 0) {
-            // Files are selected, disable the container
-            fileInputContainer.style.pointerEvents = 'none';
-        } else {
-            // No files selected, enable the container
-            fileInputContainer.style.pointerEvents = 'auto';
-        }
-    }
 
     // Check if total selected file size is less than 500MB before form submission
     $(document).ready(function () {
