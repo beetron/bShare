@@ -38,24 +38,27 @@
                     </div>
 
                     @*File selection*@
-                    <div class="form-group pt-4">
-                        <label for="files" class="control-label"></label>
-                        <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();" />
-                        <div id="selectedFileDetails" class="pt-4" style="display: none;">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>File Name</th>
-                                    <th>Size (MB)</th>
-                                </tr>
-                                </thead>
-                                <tbody id="fileListBody">
-                                </tbody>
-                            </table>
+                    <div id="fileInputContainer">
+                        <div class="form-group pt-4">
+                            <label for="files" class="control-label"></label>
+                            <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();"/>
                         </div>
                     </div>
+                    @*File details shown*@
+                    <div id="selectedFileDetails" class="pt-4" style="display: none;">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>Size (MB)</th>
+                            </tr>
+                            </thead>
+                            <tbody id="fileListBody">
+                            </tbody>
+                        </table>
+                    </div>
 
-                    <div class="form-group pt-5">
+                        <div class="form-group pt-5">
                         <div class="row">
                             @*DateExpire selection*@
                             <div class="col-6">
@@ -113,6 +116,7 @@
             $("#dateExpire").val("12"); // reset expiry selection
             document.getElementById('charCountDisplay').innerHTML = "0 / 12 characters"; //reset char counter
             var fileInput = document.getElementById('fileInputContainer'); // enable file input
+            document.getElementById('fileInputContainer').style.display = '';
         });
     });
 
@@ -174,8 +178,12 @@
 
         // Check if more than one file is selected
         if (filesInput.files.length > 0) {
+
             // Show the selectedFileDetails div
             document.getElementById('selectedFileDetails').style.display = 'block';
+
+            // Hide file input if files are selected
+            document.getElementById('fileInputContainer').style.display = 'none';
 
             // Loop through the selected files and display file name and file size
             for (var i = 0; i < filesInput.files.length; i++) {
