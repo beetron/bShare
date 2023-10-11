@@ -112,6 +112,7 @@ namespace Bshare.Controllers
                 fileRecord.ShortLink = _bshareLink + fileRecord.ShortLink;
                 ShortLinkViewModel shortLinkViewModel = new ShortLinkViewModel
                 {
+                    FileUploadId = fileRecord.FileUploadId,
                     FileDescription = fileRecord.FileDescription,
                     Password = fileRecord.Password,
                     ShortLink = fileRecord.ShortLink,
