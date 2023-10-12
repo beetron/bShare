@@ -20,7 +20,7 @@ namespace Bshare.Repository
         }
 
         // Get single upload record by short link
-        public async Task<FileUpload> GetByShortLinkAsync(string shortLink)
+        public async Task<FileUpload?> GetByShortLinkAsync(string shortLink)
         {
             try
             {
@@ -78,7 +78,7 @@ namespace Bshare.Repository
         {
             try
             {
-                FileUpload result = await _fileUploadContext.FileUploads.FirstOrDefaultAsync(x => x.ShortLink == shortLink);
+                FileUpload? result = await _fileUploadContext.FileUploads.FirstOrDefaultAsync(x => x.ShortLink == shortLink);
                 if (result != null)
                 {
                     return true;
@@ -96,7 +96,7 @@ namespace Bshare.Repository
         public async Task<string> GenerateShortLinkAsync(int shortLinkLength)
         {
             string shortLink = "";
-            FileUpload result;
+            FileUpload? result;
 
             try
             {
@@ -131,7 +131,7 @@ namespace Bshare.Repository
                     return false;
                 }
 
-                FileUpload matchingFileUploadData =
+                FileUpload? matchingFileUploadData =
                     await _fileUploadContext.FileUploads.FirstOrDefaultAsync(f =>
                         f.FileUploadId == fileUpload.FileUploadId);
 
