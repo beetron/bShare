@@ -1,6 +1,6 @@
-# <b>WORK IN PROGRESS!!!!</b>
-
 # bShare
+
+<b>WORK IN PROGRESS!!!!</b>
 
 bShare is a personal project for uploading and sharing files on the fly.<br><br>
 Instructions on how to clone and replicate a working bShare web app below.<br><br>
