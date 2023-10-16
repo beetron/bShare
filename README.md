@@ -68,9 +68,3 @@ bshare_UploadLocation = "C:/inetpub/wwwroot/storage/bshare-uploads/"<br>
 <code>
 bshare_PyPath = "c:/python/scripts"<br>
 </code>
-
-
-
-
-
-
