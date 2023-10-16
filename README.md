@@ -51,20 +51,12 @@ These steps are necessary, if you are testing the web app out of the box.
 1.) Required Environment Variables<br><br>
 <code>
 bShare_AppUrl = "https://your-apps-base-url.com/"<br>
-</code>
 <br>
-<code>
 bshare_DevConnectionString = "Your dev database connection string"<br>
-</code>
 <br>
-<code>
 bshare_ProdConnectionString = "Your prod database connection string"<br>
-</code>
 <br>
-<code>
 bshare_UploadLocation = "C:/inetpub/wwwroot/storage/bshare-uploads/"<br>
-</code>
 <br>
-<code>
 bshare_PyPath = "c:/python/scripts"<br>
 </code>
