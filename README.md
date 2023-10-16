@@ -9,21 +9,17 @@ Automatic mysql data deletion for expired uploads, and stored file deletion via 
 <hr>
 
 [Language] <br>
--
 C#, Javascript, HTML, CSS/Boostrap 5 <br><br>
 
 [Framework] <br> 
--
 Asp.NET Core 7.0 MVC <br><br>
 
 [Database] <br>
--
 MySQL (ORM found below)
 
 <hr>
 
 [Features]<br>
--
 - Anonymous file uploading with file size limit per upload <br>
 - Physical file storage to server <br>
 - Random short link generator <br>
@@ -36,13 +32,11 @@ MySQL (ORM found below)
 <hr>
 
 [Update plans]<br>
--
-- Adding files in addition to selected files <br>
+<li>Adding files in addition to selected files <br>
 
 <hr>
 
 [Replicate working project]<br>
--
 
 Steps in replicating a working bShare web app.<br>
 Some information may not apply to your environment, as each server solution is different.
