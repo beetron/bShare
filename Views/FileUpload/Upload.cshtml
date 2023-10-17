@@ -10,52 +10,67 @@
         <div class="row">
             <div class="col">
                 <div class="custom-container bg-dark text-light">
-                    <div class="row col-12">
+                    <div class="row col-12 ms-2">
                         bShare is a temporary file upload and share web app.<br/>
                         Details and code found at the Github link from the icon on top.<br/><br/>
                         <hr/>
-                        <ul class="ps-4">
-                            <li>500MB limit per upload.</li>
-                            <li>File expire settings of 12, 24, and 48 hours.</li>
-                            <li>QR Image generation.</li>
-                            <li>(Optional) Password for file deletion before expire date.</li>
-                            <li>(Optional) File Description text.</li>
+                        <ul class="ps-2" style="list-style-type: none;">
+                            <li class="mt-2"><i class="fa-solid fa-database fa-xl pe-3" style="color:royalblue;"></i>500MB limit per upload.</li>
+                            <li class="mt-2"><i class="fa-regular fa-clock fa-xl pe-3" style="color: yellow;"></i>File expire settings of 12, 24, and 48 hours.</li>
+                            <li class="mt-2"><i class="fa-solid fa-qrcode fa-xl pe-3" style="color:#f55c5c;"></i>QR Image generation.</li>
+                            <li class="mt-2"><i class="fa-solid fa-unlock fa-xl pe-3" style="color:#ff9b3d"></i>(Optional) Password for file deletion before expire date.</li>
                         </ul>
                         <hr/>
                     </div>
-                    @*File description input*@
-                    <div class="form-group pt-2">
-                        <p>File Description</p>
-                        @Html.TextBoxFor(model => model.FileDescription,
-                            new
-                            {
-                                @class = "form-control file-description-width",
-                                placeholder = "description here",
-                                id = "fileDescription",
-                                style = "width: 80%;"
-                            })
-                        @Html.ValidationMessageFor(model => model.FileDescription)
-                    </div>
 
-                    @*File selection*@
-                    <div id="fileInputContainer">
-                        <div class="form-group pt-4">
-                            <label for="files" class="control-label"></label>
-                            <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();"/>
+                        <div class="p-2" style="background-color:steelblue; border-radius:8px;">
+                        @*File description input*@
+                        <div class="form-group pt-2 ps-2">
+                            <p>File Description</p>
+                            @Html.TextBoxFor(model => model.FileDescription,
+                                new
+                                {
+                                    @class = "form-control file-description-width",
+                                    placeholder = "description here",
+                                    id = "fileDescription",
+                                    style = "width: 80%;"
+                                })
+                            @Html.ValidationMessageFor(model => model.FileDescription)
                         </div>
-                    </div>
-                    @*File details shown*@
-                    <div id="selectedFileDetails" class="pt-4" style="display: none;">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th>File Name</th>
-                                <th>Size (MB)</th>
-                            </tr>
-                            </thead>
-                            <tbody id="fileListBody">
-                            </tbody>
-                        </table>
+
+                        @*File selection*@
+                        <div id="fileInputContainer">
+                            <div class="form-group pt-4 ps-2">
+                                <label for="files" class="control-label"></label>
+                                <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();"/>
+                            </div>
+                        </div>
+                        @*File details shown*@
+                        <div id="selectedFileDetails" class="pt-4 ps-2" style="display: none;">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Size</th>
+                                </tr>
+                                <td colspan="2">
+                                    <hr/>
+                                </td>
+                                </thead>
+                                <tbody id="fileListBody">
+                                </tbody>
+                                <tfoot>
+                                <td colspan="2">
+                                    <hr/>
+                                </td>
+                                <tr>
+                                    <th class="text-end pe-3">Total: </th>
+                                    @*Total file size*@
+                                    <th id="totalSize"></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
 
                         <div class="form-group pt-5">
@@ -185,11 +200,20 @@
             // Hide file input if files are selected
             document.getElementById('fileInputContainer').style.display = 'none';
 
+            var fileDetails = document.getElementById('selectedFileDetails');
+
+            var totalFileSize = 0;
+
             // Loop through the selected files and display file name and file size
             for (var i = 0; i < filesInput.files.length; i++) {
                 var file = filesInput.files[i];
                 var fileName = file.name;
                 var fileSize = (file.size / (1024 * 1024)).toFixed(2); // Convert to MB and round to 2 decimal places
+
+                totalFileSize += parseFloat(fileSize);
+
+                document.getElementById('totalSize').innerHTML = totalFileSize.toFixed(2) + " MB";
+
 
                 // Create a new table row (tr)
                 var row = document.createElement('tr');
@@ -208,6 +232,7 @@
 
                 // Append the row to the table body
                 fileListBody.appendChild(row);
+
             }
         } else {
             // Hide the selectedFileDetails div when no files are selected
