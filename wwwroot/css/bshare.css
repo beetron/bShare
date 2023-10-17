@@ -1,4 +1,13 @@
-﻿.custom-background-color {
+﻿@font-face {
+    font-family: 'Mohave';
+    src: url('../font/Mohave-Regular.ttf') format('truetype');
+}
+
+body {
+    font-family: Mohave, sans-serif;
+}
+
+.custom-background-color {
     background-color: #001524;
 }
 
