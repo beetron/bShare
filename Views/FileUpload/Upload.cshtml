@@ -9,21 +9,50 @@
     <div class="container mt-5 col-12 col-lg-8 col-xl-6 col-xxl-6">
         <div class="row">
             <div class="col">
-                <div class="custom-container bg-dark text-light">
+                <div class="custom-container text-light">
                     <div class="row col-12 ms-2">
                         bShare is a temporary file upload and share web app.<br/>
-                        Details and code found at the Github link from the icon on top.<br/><br/>
-                        <hr/>
-                        <ul class="ps-2" style="list-style-type: none;">
-                            <li class="mt-2"><i class="fa-solid fa-database fa-xl pe-3" style="color:royalblue;"></i>500MB limit per upload.</li>
-                            <li class="mt-2"><i class="fa-regular fa-clock fa-xl pe-3" style="color: yellow;"></i>File expire settings of 12, 24, and 48 hours.</li>
-                            <li class="mt-2"><i class="fa-solid fa-qrcode fa-xl pe-3" style="color:#f55c5c;"></i>QR Image generation.</li>
-                            <li class="mt-2"><i class="fa-solid fa-unlock fa-xl pe-3" style="color:#ff9b3d"></i>(Optional) Password for file deletion before expire date.</li>
-                        </ul>
-                        <hr/>
+                        Visit my github for tech details and code.<br/><br/>
+                        <hr style="width: 90%;"/>
+
+                        <table class="m-2">
+                            <tr>
+                                <td class="text-end pb-2">
+                                    <i class="fa-solid fa-database fa-xl" style="color:royalblue;"></i>
+                                </td>
+                                <td class="ps-2">
+                                    500MB limit per upload.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-2">
+                                    <i class="fa-regular fa-clock fa-xl" style="color: yellow;"></i>
+                                </td>
+                                <td class="ps-2">
+                                    File expire settings of 12, 24, and 48 hours.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-2">
+                                    <i class="fa-solid fa-qrcode fa-xl" style="color:#f55c5c;"></i>
+                                </td>
+                                <td class="ps-2">
+                                    QR Image generation.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-2">
+                                    <i class="fa-solid fa-unlock fa-xl" style="color:#ff9b3d"></i>
+                                </td>
+                                <td class="ps-2">
+                                    (Optional) Password for file deletion before expire date.
+                                </td>
+                            </tr>
+                        </table>
+                        <br/>
                     </div>
 
-                        <div class="p-2" style="background-color:steelblue; border-radius:8px;">
+                    <div class="p-2" style="background-color:#176B87; border-radius:8px;">
                         @*File description input*@
                         <div class="form-group pt-2 ps-2">
                             <p>File Description</p>
@@ -31,7 +60,6 @@
                                 new
                                 {
                                     @class = "form-control file-description-width",
-                                    placeholder = "description here",
                                     id = "fileDescription",
                                     style = "width: 80%;"
                                 })
@@ -40,7 +68,7 @@
 
                         @*File selection*@
                         <div id="fileInputContainer">
-                            <div class="form-group pt-4 ps-2">
+                            <div class="form-group pt-4 ps-1 pb-2">
                                 <label for="files" class="control-label"></label>
                                 <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();"/>
                             </div>
@@ -73,7 +101,7 @@
                         </div>
                     </div>
 
-                        <div class="form-group pt-5">
+                    <div class="form-group pt-5">
                         <div class="row">
                             @*DateExpire selection*@
                             <div class="col-6">
@@ -106,10 +134,10 @@
                         </div>
                         <div class="row justify-content-center">
                             <div class="col-3 pt-3 text-end">
-                                <input type="submit" value="Upload" class="btn btn-secondary"/>
+                                <input type="submit" value="Upload" class="btn custom-button-color text-light"/>
                             </div>
                             <div class="col-3 pt-3 text-start">
-                                <button type="button" id="resetButton" class="btn btn-secondary">Reset</button>
+                                <button type="button" id="resetButton" class="btn custom-button-color text-light">Reset</button>
                             </div>
                         </div>
                     </div>

@@ -1,12 +1,16 @@
 ﻿.custom-background-color {
-    background-color:steelblue
+    background-color: #001524;
 }
 
 .custom-container {
-    background-color: white;
+    background-color: #04364A;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.custom-content-container {
+    background-color:#04364A;
 }
 
 .custom-width {
@@ -15,4 +19,21 @@
 
 .file-description-width {
     width: 400px;
+}
+
+.custom-button-color {
+    background-color: #176B87;
+}
+
+.custom-link:link {
+    color: white;
+}
+.custom-link:visited {
+    color: white;
+}
+.custom-link:hover {
+    color: #176B87;
+}
+.custom-link:active {
+    color: #176B87;
 }
