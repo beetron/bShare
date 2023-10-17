@@ -5,7 +5,7 @@ namespace Bshare.Services
     public interface IFileService
     {
         Task<ICollection<FileDetail>> SaveFileAsync(UploadViewModel uploadViewModel, List<IFormFile> files, string _localFilePath);
-        Task<ICollection<FileDetail>> DeleteFileAsync(DeleteViewModel deleteViewModel, string _localFilePath);
+        Task<ICollection<FileDetail>> DeleteFile(DeleteViewModel deleteViewModel, string _localFilePath);
         
     }
 }

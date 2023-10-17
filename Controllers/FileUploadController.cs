@@ -224,7 +224,7 @@ namespace Bshare.Controllers
             if (await _iFilesUploadRepository.CheckPasswordAsync(fileUpload, fileUpload.Password))
             {
                 // Delete physical files on server
-                await _iFileService.DeleteFileAsync(deleteViewModel, _localFilePath);
+                await _iFileService.DeleteFile(deleteViewModel, _localFilePath);
 
                 // Delete file upload record from database
                 await _iFilesUploadRepository.DeleteAsync(fileUpload.FileUploadId);

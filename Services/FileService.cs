@@ -52,16 +52,16 @@ namespace Bshare.Services
         }
 
         // Delete physical file from server
-        public async Task<ICollection<FileDetail>> DeleteFileAsync(DeleteViewModel deleteViewModel, string _localFilePath)
+        public Task<ICollection<FileDetail>> DeleteFile(DeleteViewModel deleteViewModel, string _localFilePath)
         {
             string directoryPath = Path.Combine(_localFilePath, deleteViewModel.ShortLink);
 
             if (Directory.Exists(directoryPath))
             {
                 Directory.Delete(directoryPath, true);
-                return null;
+                return Task.FromResult<ICollection<FileDetail>>(null);
             }
-            return null;
+            return Task.FromResult<ICollection<FileDetail>>(null);
         }
     }
 }
