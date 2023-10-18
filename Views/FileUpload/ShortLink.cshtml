@@ -1,55 +1,68 @@
 ﻿@model ShortLinkViewModel
 @{
 }
-
 <body class="custom-background-color">
 <div class="container mt-5 col-12 col-lg-8 col-xl-6 col-xxl-6">
     <div class="row">
         <div class="col">
-            <div class="custom-container bg-dark text-light justify-content-center">
+            <div class="custom-container text-light justify-content-center">
+                    @*File Description*@
                 <div class="row">
-                    <div class="row">
-                        <div class="col-12">
+                    <div class="row mx-auto">
+                        <div class="col-6 text-end">
                                 <h5>File Description:</h5>
+                        </div>
+                        <div class="col-6 text-start">
                             <p style="width: 100%;">@Model.FileDescription</p>
                         </div>
                     </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-12">
-                                <h5>Click link to copy: </h5>
-                            <input type="text" id="shortLink" class="p-2" readonly value="@Model.ShortLink" onclick="copyToClipboard()"
-                                   style="border: none; background-color: transparent; color: white; width: 100%;">
+                    <hr/>
+                    @*Short Link*@
+                    <div class="row pb-2">
+                        <div class="col-12 text-center">
+                                <button class="btn text-light custom-button-color-two" onclick="copyToClipboard()">
+                                    <i class="fa-regular fa-copy fa-beat fa-xl pe-2"></i>Copy
+                            </button>
+                            @*<p id="shortLink" class="p-2">
+                                @Model.ShortLink
+                            </p>*@
+                            <input type="text" id="shortLink" readonly value="@Model.ShortLink" class="text-center"
+                            style="background-color:transparent;border:0px;color:white;width:100%;"/>
                         </div>
                     </div>
-                    <hr />
-                    <div class="row">
-                        <div class="col-3">
+                    <hr/>
+                    @*Date Expire*@
+                    <div class="row mx-auto">
+                        <div class="col-6 text-end">
                             <h5>Expires on:</h5>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <p>@Model.DateExpire.ToString("MM/dd (HH:MM)")</p>
                         </div>
                     </div>
-                    <hr />
+                    <hr/>
                     <div class="p-2 col-12 text-center">
-                        <img src="data:image/bmp;base64,@Convert.ToBase64String(Model.QrImage)" style="width: 125px; height: auto;" alt="QR Code" />
+                        <img src="data:image/bmp;base64,@Convert.ToBase64String(Model.QrImage)" style="width: 125px; height: auto;" alt="QR Code"/>
                     </div>
-                    <hr />
+                    <hr/>
                 </div>
-                <div class="row justify-content-start">
-                    <div class="col">
-                        <table class="table text-light">
+                    @* File Details *@
+                    <div class="row justify-content-start">
+                    <div class="col p-2 m-3 file-details">
+                        <table class="table mx-auto text-light">
                             <thead>
                             <tr>
                                 <th></th>
                                 <th>File Name</th>
-                                <th>Size(MB)</th>
+                                <th>Size</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             @{
                                 int fileCount = 1;
+                                double totalFileSize = 0;
+
                             }
                             @foreach (var fileDetail in Model.FileDetails)
                             {
@@ -62,13 +75,21 @@
                                         <td>
                                             @Html.Hidden("fileName", @fileDetail.FileName)
                                             @Html.HiddenFor(model => model.ShortLink)
-                                            <button type="submit" class="btn btn-light"><i class="far fa-circle-down fa-lg"></i></button>
+                                            <button type="submit" class="btn btn-light custom-link"><i class="far fa-circle-down fa-lg"></i></button>
                                         </td>
                                     </tr>
                                 }
                                 fileCount++;
+                                totalFileSize += @fileDetail.FileSize;
                             }
                             </tbody>
+                            @*Total file size*@
+                            <tfoot>
+                            <th></th>
+                            <th class="text-end pe-3">Total: </th>
+                            <th>@totalFileSize.ToString("0.00") MB</th>
+                            <th></th>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -84,19 +105,19 @@
                             }
                             @if (fileNames.Length >= 2)
                             {
-                                <button type="submit" class="btn btn-light align-content-end">Download All</button>
+                                <button type="submit" class="btn custom-button-color text-light align-content-end">Download All</button>
                             }
                         }
                     </div>
                 </div>
                 <div class="row">
-                    @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post, new { id = "deleteForm"}))
+                    @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post, new { id = "deleteForm" }))
                     {
                         // Delete button
                         <div class="col-8 pt-2">
                             @Html.HiddenFor(model => model.ShortLink)
                             @Html.HiddenFor(model => model.FileUploadId)
-                            <button type="submit" class="btn btn-danger">Delete</button>
+                            <button type="submit" class="btn custom-button-color text-light">Delete</button>
                         </div>
                         // Password input
                         <div class="form-group col-4 pt-2">
@@ -121,6 +142,7 @@
         document.execCommand("copy");
         alert("Link Copied! \n" + textBox.value);
     }
+
 
     // Confirmation alert before deleting record
     document.getElementById('deleteForm').addEventListener('submit', function (e) {

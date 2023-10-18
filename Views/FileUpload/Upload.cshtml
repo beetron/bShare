@@ -52,9 +52,9 @@
                         <br/>
                     </div>
 
-                    <div class="p-2" style="background-color:#176B87; border-radius:8px;">
+                    <div class="p-2 file-details">
                         @*File description input*@
-                        <div class="form-group pt-2 ps-2">
+                        <div class="form-group pt-2 ps-2 mx-auto">
                             <p>File Description</p>
                             @Html.TextBoxFor(model => model.FileDescription,
                                 new
@@ -68,29 +68,23 @@
 
                         @*File selection*@
                         <div id="fileInputContainer">
-                            <div class="form-group pt-4 ps-1 pb-2">
+                            <div class="form-group pt-4 ps-1 pb-2 text-center">
                                 <label for="files" class="control-label"></label>
                                 <input type="file" id="files" name="files" multiple onchange="displaySelectedFileDetails();"/>
                             </div>
                         </div>
                         @*File details shown*@
                         <div id="selectedFileDetails" class="pt-4 ps-2" style="display: none;">
-                            <table>
+                            <table class="table mx-auto text-light">
                                 <thead>
                                 <tr>
                                     <th>File Name</th>
                                     <th>Size</th>
                                 </tr>
-                                <td colspan="2">
-                                    <hr/>
-                                </td>
                                 </thead>
                                 <tbody id="fileListBody">
                                 </tbody>
                                 <tfoot>
-                                <td colspan="2">
-                                    <hr/>
-                                </td>
                                 <tr>
                                     <th class="text-end pe-3">Total: </th>
                                     @*Total file size*@
@@ -104,7 +98,7 @@
                     <div class="form-group pt-5">
                         <div class="row">
                             @*DateExpire selection*@
-                            <div class="col-6">
+                            <div class="col-5">
                                 <p>Expires in</p>
                                 @Html.DropDownList("DropdownSelection", new SelectList(
                                     new List<SelectListItem>
@@ -115,8 +109,10 @@
                                     }, "Value", "Text"),
                                     new { @class = "form-control custom-width", id = "dateExpire", style = "width: 60%;" })
                             </div>
+                        </div>
+                        <div class="row pt-3">
                             @*Password input*@
-                            <div class="col-6">
+                            <div class="col-5">
                                 <p>Password (optional)</p>
                                 @Html.TextBoxFor(model => model.Password,
                                     new
@@ -126,7 +122,7 @@
                                         onkeyup = "charUpdate()",
                                         id = "charCount",
                                         type = "password",
-                                        style = "width: 50%;"
+                                        style = "width: 60%;"
                                     })
                                 @Html.ValidationMessageFor(model => model.Password)
                                 <span id="charCountDisplay">0 / 12 characters</span>

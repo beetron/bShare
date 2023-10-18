@@ -26,12 +26,21 @@ body {
     width: 150px;
 }
 
+.file-details {
+    background-color: #176B87;
+    border-radius: 8px;
+}
+
 .file-description-width {
     width: 400px;
 }
 
 .custom-button-color {
     background-color: #176B87;
+}
+
+.custom-button-color-two {
+    background-color: #04364A;
 }
 
 .custom-link:link {
