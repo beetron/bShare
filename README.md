@@ -38,11 +38,11 @@ MySQL (ORM found below)
 
 [Replicate working project]<br>
 
-Steps in replicating a working bShare web app.<br>
+Steps in replicating a working bShare web app, <b>including</b> server side automation.<br>
 Some information may not apply to your environment, as each server solution is different.
-These steps are necessary, if you are testing the web app out of the box.
+These steps are necessary if you want to run the app out of the box.<br>
 
-1.) Required Environment Variables<br><br>
+1.) Environment Variables<br>
 <code>
 bShare_AppUrl = "https://your-apps-base-url.com/"<br>
 <br>
@@ -52,5 +52,27 @@ bshare_ProdConnectionString = "Your prod database connection string"<br>
 <br>
 bshare_UploadLocation = "C:/inetpub/wwwroot/storage/bshare-uploads/"<br>
 <br>
-bshare_PyPath = "c:/python/scripts"<br>
+bshare_PyPath = "c:/your/script/location"<br>
 </code>
+
+<br>
+
+2.) MySQL event scheduler<br>
+Setup the event scheduler to query the database for any expired file uploads.
+If DateExpired value is older than the datetime when scheduler is ran, 
+the record(row(s) will be deleted.
+<br>
+
+2-1.) First enable the scheduler.<br>
+<code>
+set global event_scheduler = on;
+</code>
+<br>
+
+2-2.) Make sure scheduler is enabled.<br>
+<code>
+show variables like 'event_scheulder';
+</code>
+<br>
+
+
