@@ -1,9 +1,7 @@
 # bShare
 
-<b>WORK IN PROGRESS!!!!</b>
-
-bShare is a personal project for uploading and sharing files on the fly.<br><br>
-Instructions on how to clone and replicate a working bShare web app below.<br><br>
+bShare is a personal project for uploading and sharing files on the fly.<br>
+Instructions on how to clone and replicate a working bShare web app below.<br>
 Automatic mysql data deletion for expired uploads, and stored file deletion via python script.<br>
 
 <hr>
@@ -42,7 +40,7 @@ Steps in replicating a working bShare web app, <b>including</b> server side auto
 Some information may not apply to your environment, as each server solution is different.
 These steps are necessary if you want to run the app out of the box.<br>
 
-1.) Environment Variables<br>
+1.) <b>Environment Variables</b><br>
 ```
 bShare_AppUrl = "https://your-apps-base-url.com/"
 
@@ -57,24 +55,55 @@ bshare_PyPath = "c:/your/script/location"
 
 <br>
 
-2.) MySQL event scheduler<br>
+2.) <b>MySQL event scheduler</b><br><br>
 Setup the event scheduler to query the database for any expired file uploads.
 If DateExpired value is older than the datetime when scheduler is ran, 
 the record(row(s) will be deleted.
 <br>
 
-2-1.) First enable the scheduler.<br>
+2-1.) First enable the event scheduler.<br>
 ```
-set global event_scheduler = on;
+SET GLOBAL event_scheduler = on;
+```
+
+2-2.) Make sure event scheduler is enabled.<br>
+```
+SHOW VARIABLES LIKE 'event_scheulder';
+```
+
+2-3.) Create event.<br>
+```
+DELIMITER //
+CREATE EVENT DeleteExpiredFiles
+ON SCHEDULE EVERY 5 MINUTE
+DO
+BEGIN
+DELETE FROM bshare.filedetails
+WHERE DateExpire < NOW();
+END;
+//
+DELIMITER ;
+```
+
+2-4) Check created event.<br>
+```
+SHOW EVENTS;
 ```
 <br>
 
-2-2.) Make sure scheduler is enabled.<br>
-```
-show variables like 'event_scheulder';
-```
-<br>
+3.) <b>File deletion script (Python)</b><br><br>
+I wrote a simple Python script for the file deletion.<br><br>
+The script checks and compares current time and created time of the folders and removes anything older than X hours 
+from creation.<br>
+There are much more better ways to have files removed in a timely manner.
+I may add this in the future.<br>
 
-```c#
-Console.WriteLine("blahblah");
-```
+<a href="https://github.com/beetron/Python/blob/main/Delete-Expired-Folders/Delete-Expired-Folders.py" target="_BLANK">
+Delete-Expired-Folders.py</a>
+
+4.) <b>Add Python script to the Windows Task Schdeuler.</b><br><br>
+Details on how on the link below.<br>
+(In courtesy of JEAN-CHRISTOPHE CHOUINARD)<br>
+<a href="https://www.jcchouinard.com/python-automation-using-task-scheduler/" target="_BLANK">
+How to add and run scripts to Windows Task Scheduler
+</a><br>
