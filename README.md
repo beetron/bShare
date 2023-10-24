@@ -43,17 +43,17 @@ Some information may not apply to your environment, as each server solution is d
 These steps are necessary if you want to run the app out of the box.<br>
 
 1.) Environment Variables<br>
-<code>
-bShare_AppUrl = "https://your-apps-base-url.com/"<br>
-<br>
-bshare_DevConnectionString = "Your dev database connection string"<br>
-<br>
-bshare_ProdConnectionString = "Your prod database connection string"<br>
-<br>
-bshare_UploadLocation = "C:/inetpub/wwwroot/storage/bshare-uploads/"<br>
-<br>
-bshare_PyPath = "c:/your/script/location"<br>
-</code>
+```
+bShare_AppUrl = "https://your-apps-base-url.com/"
+
+bshare_DevConnectionString = "Your dev database connection string"
+
+bshare_ProdConnectionString = "Your prod database connection string"
+
+bshare_UploadLocation = "C:/your/file/storage/location/"
+
+bshare_PyPath = "c:/your/script/location"
+```
 
 <br>
 
@@ -64,15 +64,17 @@ the record(row(s) will be deleted.
 <br>
 
 2-1.) First enable the scheduler.<br>
-<code>
+```
 set global event_scheduler = on;
-</code>
+```
 <br>
 
 2-2.) Make sure scheduler is enabled.<br>
-<code>
+```
 show variables like 'event_scheulder';
-</code>
+```
 <br>
 
-
+```c#
+Console.WriteLine("blahblah");
+```
