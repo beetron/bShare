@@ -110,23 +110,26 @@
                         }
                     </div>
                 </div>
-                <div class="row">
-                    @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post, new { id = "deleteForm" }))
-                    {
-                        // Delete button
-                        <div class="col-8 pt-2">
-                            @Html.HiddenFor(model => model.ShortLink)
-                            @Html.HiddenFor(model => model.FileUploadId)
-                            <button type="submit" class="btn custom-button-color text-light">Delete</button>
-                        </div>
-                        // Password input
-                        <div class="form-group col-4 pt-2">
-                            <input type="password" class="form-control" id="Password" name="Password" maxLength="12" placeholder="Password">
-                            @Html.HiddenFor(model => model.Password)
-                            @Html.ValidationMessageFor(model => model.Password)
-                        </div>
-                    }
-                </div>
+                    <div class="row">
+                        @using (Html.BeginForm("DeleteUpload", "FileUpload", FormMethod.Post, new { id = "deleteForm" }))
+                        {
+                            // Delete button
+                            <div class="col-8 pt-2">
+                                @Html.HiddenFor(model => model.ShortLink)
+                                @Html.HiddenFor(model => model.FileUploadId)
+                                <button type="submit" class="btn custom-button-color text-light">Delete</button>
+                            </div>
+                            // Password input
+                            <div class="form-group col-4 pt-2">
+                                <input type="password" class="form-control" id="Password" name="Password" maxLength="12" placeholder="Password">
+                                @Html.HiddenFor(model => model.Password)
+                                @Html.ValidationMessageFor(model => model.Password)
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <a href="@Url.Action("Upload", "FileUpload")" class="custom-link text-center">Back to Home</a>
+                    </div>
             </div>
         </div>
     </div>
