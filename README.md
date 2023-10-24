@@ -13,7 +13,8 @@ C#, Javascript, HTML, CSS/Boostrap 5 <br><br>
 Asp.NET Core 7.0 MVC <br><br>
 
 [Database] <br>
-MySQL (ORM found below)
+MySQL<br>
+<img src="http://f.btro.jp/dev/bshare/bShare-DB-ORM.png">
 
 <hr>
 
@@ -30,7 +31,8 @@ MySQL (ORM found below)
 <hr>
 
 [Update plans]<br>
-<li>Adding files in addition to selected files <br>
+<li> Adding files in addition to selected files <br>
+<li> Better server side file deletion method <br>
 
 <hr>
 
