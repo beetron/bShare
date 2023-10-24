@@ -5,20 +5,36 @@ Instructions on how to clone and replicate a working bShare web app below.<br>
 Automatic mysql data deletion for expired uploads, and stored file deletion via python script.<br>
 
 <hr>
+<table>
+<tr>
+<td>Language</td>
+<td>
+C#, Javascript, HTML, CSS/Boostrap5, Python
+</td>
+</tr>
 
-[Language] <br>
-C#, Javascript, HTML, CSS/Boostrap 5 <br><br>
+<tr>
+<td>
+Framework</td>
+<td>Asp.NET Core 7.0 MVC</td>
+</tr>
 
-[Framework] <br> 
-Asp.NET Core 7.0 MVC <br><br>
+<tr>
+<td>Server</td>
+<td> Windows Server IIS</td>
+</tr>
 
-[Database] <br>
-MySQL<br>
+<tr>
+<td>Database</td>
+<td>MySQL (ORM below)</td>
+</tr>
+</table>
+
 <img src="http://f.btro.jp/dev/bshare/bShare-DB-ORM.png">
 
 <hr>
 
-[Features]<br>
+<b>[Features]</b><br>
 - Anonymous file uploading with file size limit per upload <br>
 - Physical file storage to server <br>
 - Random short link generator <br>
@@ -30,13 +46,14 @@ MySQL<br>
 <br>
 <hr>
 
-[Update plans]<br>
+<b>[Update plans]</b><br>
+<li> File encryption when storing, and descryption when downloading <br>
 <li> Adding files in addition to selected files <br>
 <li> Better server side file deletion method <br>
 
 <hr>
 
-[Replicate working project]<br>
+<b>[Replicate working project]</b><br>
 
 Steps in replicating a working bShare web app, <b>including</b> server side automation.<br>
 Some information may not apply to your environment, as each server solution is different.
