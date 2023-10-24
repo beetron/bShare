@@ -1,6 +1,6 @@
 # bShare
 
-bShare is a personal project for uploading and sharing files on the fly.<br>
+bShare is a full stack personal project for uploading and sharing files on the fly.<br>
 Instructions on how to clone and replicate a working bShare web app below.<br>
 Automatic mysql data deletion for expired uploads, and stored file deletion via python script.<br>
 
